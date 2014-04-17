@@ -1,18 +1,15 @@
 package main
 
 import "os"
-import "fmt"
 import "./mapper"
 
 func main() {
-	// read whole the file
 	if len(os.Args) <= 2 {
-		panic("input and output command line arguments required\n")
+		panic("input dir and output dir command line arguments required\n")
 	}
 
-	input := os.Args[1]
-	output := os.Args[2]
-	fmt.Printf("mapping from %s to %s\n", input, output)
+	inputDir := os.Args[1]
+	outputDir := os.Args[2]
 
-	mapper.Map(input, output)
+	mapper.Map(inputDir, outputDir)
 }
