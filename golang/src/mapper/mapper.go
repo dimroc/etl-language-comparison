@@ -8,11 +8,11 @@ import(
   "regexp"
 )
 
-func mapFunc(hood_id string, hood string, borough string, message string) {
+func mapFunc(hood_id string, hood string, borough string, message string) string {
     if match, err := regexp.MatchString("(?i)knicks", message); err == nil && match {
-      fmt.Printf("%s\t%s\n", hood, "1")
+      return fmt.Sprintf("%s\t%s\n", hood, "1")
     } else {
-      fmt.Printf("%s\t%s\n", hood, "0")
+      return fmt.Sprintf("%s\t%s\n", hood, "0")
     }
 }
 
@@ -22,6 +22,11 @@ func Map(input string, output string) {
     if err != nil { panic(err) }
     defer file.Close()
 
+    // open output file
+    destination, err := os.Create(output)
+    if err != nil { panic(err) }
+    defer destination.Close()
+
     // Can't use CsvReader because it is unforgiving with single quotes (")
     scanner := bufio.NewScanner(file)
     for scanner.Scan() {
@@ -29,7 +34,8 @@ func Map(input string, output string) {
       record := strings.Split(line, "\t")
 
       hood_id, hood, borough, message := record[0], record[1], record[2], record[3]
-      mapFunc(hood_id, hood, borough, message)
+      rval := mapFunc(hood_id, hood, borough, message)
+      destination.WriteString(rval)
     }
 
     if err := scanner.Err(); err != nil {
