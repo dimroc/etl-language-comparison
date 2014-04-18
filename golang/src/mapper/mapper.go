@@ -12,12 +12,29 @@ import (
 func Map(input string, output string) {
 	inputFiles := filesInDir(input)
 	outputFiles := generateOutputFilenames(output, len(inputFiles))
+  channel := make(chan bool, len(inputFiles))
 
 	for index, inputPath := range inputFiles {
 		outputPath := outputFiles[index]
 		fmt.Printf("mapping from %s to %s\n", inputPath, outputPath)
-		mapSingleFile(inputPath, outputPath)
+		go mapSingleFileToChannel(inputPath, outputPath, channel)
 	}
+
+  // Opted for select over sync.WaitGroup to demonstrate unique Go features.
+  // w: = sync.WaitGroup; w.Add(12); w.Wait()
+  for _ = range inputFiles {
+    select {
+    case <-channel:
+        fmt.Println("Finished mapping.")
+    }
+  }
+
+  fmt.Println("DONE")
+}
+
+func mapSingleFileToChannel(inputPath string, outputPath string, channel chan bool) {
+    mapSingleFile(inputPath, outputPath)
+    channel <- true
 }
 
 func mapFunc(hood_id string, hood string, borough string, message string) string {
