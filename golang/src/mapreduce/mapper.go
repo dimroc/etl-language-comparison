@@ -1,4 +1,4 @@
-package mapper
+package mapreduce
 
 import (
 	"bufio"
@@ -9,10 +9,10 @@ import (
 	"strings"
 )
 
-func Map(input string, output string) {
-	inputFiles := filesInDir(input)
+func Map(inputDir string, output string) {
+	inputFiles := filesInDir(inputDir)
 	outputFiles := generateOutputFilenames(output, len(inputFiles))
-  channel := make(chan bool, len(inputFiles))
+	channel := make(chan bool, len(inputFiles))
 
 	for index, inputPath := range inputFiles {
 		outputPath := outputFiles[index]
@@ -20,21 +20,21 @@ func Map(input string, output string) {
 		go mapSingleFileToChannel(inputPath, outputPath, channel)
 	}
 
-  // Opted for select over sync.WaitGroup to demonstrate unique Go features.
-  // w: = sync.WaitGroup; w.Add(12); w.Wait()
-  for _ = range inputFiles {
-    select {
-    case <-channel:
-        fmt.Println("Finished mapping.")
-    }
-  }
+	// Opted for select over sync.WaitGroup to demonstrate unique Go features.
+	// w: = sync.WaitGroup; w.Add(12); w.Wait()
+	for _ = range inputFiles {
+		select {
+		case <-channel:
+			fmt.Println("Finished mapping.")
+		}
+	}
 
-  fmt.Println("DONE")
+	fmt.Println("DONE")
 }
 
 func mapSingleFileToChannel(inputPath string, outputPath string, channel chan bool) {
-    mapSingleFile(inputPath, outputPath)
-    channel <- true
+	mapSingleFile(inputPath, outputPath)
+	channel <- true
 }
 
 func mapFunc(hood_id string, hood string, borough string, message string) string {
@@ -45,14 +45,15 @@ func mapFunc(hood_id string, hood string, borough string, message string) string
 	}
 }
 
-func filesInDir(input string) []string {
-	files, err := ioutil.ReadDir(input)
+func filesInDir(inputDir string) []string {
+	files, err := ioutil.ReadDir(inputDir)
 	if err != nil {
 		panic(err)
 	}
-	filenames := make([]string, len(input))
+
+	filenames := make([]string, len(files))
 	for i := 0; i < len(filenames); i++ {
-		filenames[i] = fmt.Sprintf("%s/%s", input, files[i].Name())
+		filenames[i] = fmt.Sprintf("%s/%s", inputDir, files[i].Name())
 	}
 
 	return filenames

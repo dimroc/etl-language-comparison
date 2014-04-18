@@ -1,7 +1,10 @@
 package main
 
-import "os"
-import "./mapper"
+import (
+	"./mapreduce"
+	"fmt"
+	"os"
+)
 
 func main() {
 	if len(os.Args) <= 2 {
@@ -10,6 +13,8 @@ func main() {
 
 	inputDir := os.Args[1]
 	outputDir := os.Args[2]
+	finalOutput := fmt.Sprintf("%s/final", outputDir)
 
-	mapper.Map(inputDir, outputDir)
+	mapreduce.Map(inputDir, outputDir)
+	mapreduce.Reduce(outputDir, finalOutput)
 }
