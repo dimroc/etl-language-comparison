@@ -10,6 +10,7 @@ import (
 )
 
 func Map(inputDir string, output string) {
+	os.MkdirAll(output, 0755)
 	inputFiles := filesInDir(inputDir)
 	outputFiles := generateOutputFilenames(output, len(inputFiles))
 	channel := make(chan bool, len(inputFiles))
