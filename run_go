@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cd golang/
+GOPATH=$(pwd)
+go run src/main.go ../tmp/tweets ../tmp/go_output
