@@ -7,6 +7,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"sort"
 )
 
 func Reduce(inputDir string, output string) {
@@ -56,8 +57,31 @@ func generateOutput(output string, hash map[string]int) {
 	}
 	defer file.Close()
 
-	for key, value := range hash {
-		rval := fmt.Sprintf("%s\t%d\n", key, value)
+  sorted := convertToSortedTuples(hash)
+
+	for _, hoodcount := range sorted {
+		rval := fmt.Sprintf("%s\t%d\n", hoodcount.Hood, hoodcount.Count)
 		file.WriteString(rval)
 	}
 }
+
+func convertToSortedTuples(hash map[string]int) []hoodCount {
+    var array byCount
+    for key, value := range hash {
+        array = append(array, hoodCount{key, value})
+    }
+
+    sort.Sort(array)
+    return array
+}
+
+type hoodCount struct {
+    Hood string
+    Count int
+}
+
+type byCount []hoodCount
+
+func (a byCount) Len() int           { return len(a) }
+func (a byCount) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a byCount) Less(i, j int) bool { return a[i].Count > a[j].Count }

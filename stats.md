@@ -26,3 +26,7 @@ user  2m56.235s
 sys   0m26.472s
 
 ### Mapping thirteen files of ~100K tweets concurrently, and reduction
+
+real  3m23.165s
+user  2m56.002s
+sys   0m26.542s

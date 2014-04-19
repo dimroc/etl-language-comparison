@@ -27,4 +27,8 @@ func TestReduce(t *testing.T) {
 	if len(tokens) != 2 {
 		t.Fatal("Incorrect number of output columns")
 	}
+
+  if (tokens[1] != "2") {
+		t.Fatal("Incorrect aggregation")
+  }
 }
