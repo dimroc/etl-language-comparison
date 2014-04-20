@@ -11,10 +11,10 @@ class MapActor extends Actor {
   }
 }
 
-class Mapper {
+object Mapper {
   def map() = {
     val system = ActorSystem("MapSystem")
-    val mapActor = system.actorOf(Props[MapActor], name = "mapactor")
+    val mapActor = system.actorOf(Props[MapActor], "mapactor")
     mapActor ! "hello"
     mapActor ! "buenos dias"
   }
