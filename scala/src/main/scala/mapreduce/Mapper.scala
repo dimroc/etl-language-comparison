@@ -1,4 +1,4 @@
-package map
+package mapreduce
 
 import akka.actor.Actor
 import akka.actor.ActorSystem

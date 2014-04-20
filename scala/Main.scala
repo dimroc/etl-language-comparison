@@ -1,4 +1,4 @@
-import map._
+import mapreduce._
 
 object Main extends App {
   println("Hello")
