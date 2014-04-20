@@ -17,14 +17,21 @@ since the CPU mostly sits idle waiting on Disk IO.
 
 ## The Languages:
 
-1. Golang
-2. Scala
+1. Golang 1.2
+2. Scala 2.10.3
 
 ### Golang
 
 ```
 $ ./run_go
 ```
+
+Language features used:
+
+- goroutines
+- channels
+- selects
+
 
 real  3m23.165s
 
