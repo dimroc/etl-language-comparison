@@ -19,9 +19,11 @@ func Reduce(inputDir string, output string) {
 	}
 
 	for _, file := range files {
-		path := fmt.Sprintf("%s/%s", inputDir, file.Name())
-		fmt.Println("reducing file:", path)
-		sumEntriesFromFile(path, hash)
+		if !file.IsDir() {
+			path := fmt.Sprintf("%s/%s", inputDir, file.Name())
+			fmt.Println("reducing file:", path)
+			sumEntriesFromFile(path, hash)
+		}
 	}
 
 	generateOutput(output, hash)
