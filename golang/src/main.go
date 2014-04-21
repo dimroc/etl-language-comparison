@@ -13,7 +13,7 @@ func main() {
 
 	inputDir := os.Args[1]
 	outputDir := os.Args[2]
-	finalOutput := fmt.Sprintf("%s/final", outputDir)
+	finalOutput := fmt.Sprintf("%s/final/final", outputDir)
 
 	mapreduce.Map(inputDir, outputDir)
 	mapreduce.Reduce(outputDir, finalOutput)

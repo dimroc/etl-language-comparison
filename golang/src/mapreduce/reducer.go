@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"sort"
 	"strconv"
 	"strings"
@@ -53,6 +54,8 @@ func sumEntriesFromFile(path string, hash map[string]int) {
 }
 
 func generateOutput(output string, hash map[string]int) {
+	os.MkdirAll(filepath.Dir(output), 0755)
+
 	file, err := os.Create(output)
 	if err != nil {
 		panic(err)
