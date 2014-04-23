@@ -9,7 +9,7 @@ class MapActor extends Actor {
   def receive = {
     case "hello" => {
       println("hello back at you")
-      sender ! FileCompletedMessage
+      sender ! "DONE"
     }
   }
 }
