@@ -8,7 +8,7 @@ import (
 )
 
 func TestReduce(t *testing.T) {
-	inputDir := "./fixtures"
+	inputDir := "../../../fixtures"
 	outputFile := "/tmp/golang_mapreduce_test_output/final"
 
 	Reduce(inputDir, outputFile)
