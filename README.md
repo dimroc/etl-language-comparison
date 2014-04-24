@@ -12,8 +12,10 @@ The ~1GB dataset for this task, sampled below, contains a tweet's message and it
 175	morningside-heights	Manhattan	It feels half-cheating half-fulfilling to cite myself.
 ```
 
-These tasks are not run on Hadoop but do run concurrently. Performance numbers are moot
-since the CPU mostly sits idle waiting on Disk IO.
+### Initial Assumption:
+
+* These tasks are not run on Hadoop but do run concurrently. Performance numbers are moot since the CPU mostly sits idle waiting on Disk IO.
+* Boy was that assumption wrong.
 
 ## The Languages:
 
@@ -26,15 +28,19 @@ since the CPU mostly sits idle waiting on Disk IO.
 $ ./run_go
 ```
 
-Language features used:
+#### Features used:
 
 - goroutines
 - channels
 - selects
 
+#### Observations:
 
-real  3m23.165s
+- Performance after first write with no optimizations: `3m23.165s`
+- Only one core used despite spinning up multiple goroutines. [Had to research why all cores weren't used here](http://stackoverflow.com/questions/17868419/how-can-my-go-program-keep-all-the-cpu-cores-busy).
+- After setting GOMAXPROCS, performance dropped to: `1m10.593s`
+- Ultimately, [GOMAXPROCS will be removed](http://golang.org/pkg/runtime/#GOMAXPROCS)
+- Golang's libraries are fantastic but don't have the mature optimizations of other languages (yet).
 
-user  2m56.002s
 
-sys   0m26.542s
+
