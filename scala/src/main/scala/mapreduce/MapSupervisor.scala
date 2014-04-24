@@ -3,12 +3,12 @@ package mapreduce
 import akka.actor.Actor
 import akka.actor.ActorSystem
 import akka.actor.Props
-import java.io.File
-import scala.concurrent
-import scala.concurrent.{Await, Future}
-import scala.concurrent.duration._
 import akka.pattern.ask
 import akka.util.Timeout
+import java.io.File
+import scala.concurrent
+import scala.concurrent.duration._
+import scala.concurrent.{Await, Future}
 
 abstract class MapMessage
 case class ProcessDirectoryMessage(inputDir: String, outputDir: String) extends MapMessage
@@ -24,13 +24,11 @@ class MapSupervisor extends Actor {
 
     val inputFiles = generateInputFiles(inputDir)
     val outputFiles = generateOutputFiles(inputFiles, outputDir)
-    println(inputFiles mkString "\n")
-    println(outputFiles mkString "\n")
 
     val futures = for (fileTuple <- inputFiles.zip(outputFiles)) yield {
       val basename = fileTuple._1.getName()
       val mapActor = context.actorOf(Props[MapActor], s"mapactor.$basename")
-      mapActor ? "hello" // Equivalent to mapActor.ask("hello", 5 minutes)
+      mapActor ? ProcessFileMessage(fileTuple._1, fileTuple._2) // Equivalent to mapActor.ask("hello", 5 minutes)
     }
 
     val collapsedFuture = Future.sequence(futures.toList)
@@ -50,6 +48,6 @@ class MapSupervisor extends Actor {
     outputDirectory.mkdirs()
 
     for ((value,index) <- inputFiles.zipWithIndex)
-      yield s"${dir}output_$index"
+      yield new File(s"${dir}output_$index")
   }
 }
