@@ -32,7 +32,7 @@ class MapSupervisor extends Actor {
     }
 
     val collapsedFuture = Future.sequence(futures.toList)
-    println(Await.result(collapsedFuture, 30 minutes))
+    Await.result(collapsedFuture, 30 minutes)
   }
 
   def generateInputFiles(dir: String) = {
@@ -40,7 +40,8 @@ class MapSupervisor extends Actor {
     if (!file.isDirectory()) {
       throw new Exception("input is not a directory")
     }
-    file.listFiles
+
+    file.listFiles.filter(f => !f.isDirectory())
   }
 
   def generateOutputFiles(inputFiles: Array[File], dir: String) = {
