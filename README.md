@@ -16,7 +16,7 @@ The ~1GB dataset for this task, sampled below, contains a tweet's message and it
 ### Initial Assumption
 
 * These tasks are not run on Hadoop but do run concurrently. Performance numbers are moot since the CPU mostly sits idle waiting on Disk IO.
-* Boy was that assumption wrong.
+* **UPDATE: Boy was the IO bound assumption wrong.
 
 ## The Languages
 
@@ -28,7 +28,7 @@ The ~1GB dataset for this task, sampled below, contains a tweet's message and it
 ### Ruby and Parallel
 
 ```
-$ ./run_ruby
+$ ./run_ruby_parallel
 ```
 
 This is effectively:

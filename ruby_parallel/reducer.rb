@@ -46,6 +46,6 @@ class Reducer
   end
 end
 
-input_dir = "../tmp/ruby_output"
-destination = "../tmp/ruby_output/final/final"
+input_dir = "../tmp/ruby_parallel_output"
+destination = "../tmp/ruby_parallel_output/final/final"
 Reducer.new(input_dir, destination).reduce
