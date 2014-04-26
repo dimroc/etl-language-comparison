@@ -2,6 +2,7 @@ defmodule MapActor do
   @pattern ~r/knicks/i
 
   def map(parent, input_file, output_file) do
+    IO.puts "mapping file #{input_file}"
     output = File.stream!(output_file, [:delayed_write])
     File.stream!(input_file)
     |> Enum.into(output, fn line -> map_line(line) end)
