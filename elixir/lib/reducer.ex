@@ -47,7 +47,7 @@ defmodule Reducer do
 
   defp write_to_destination(destination, list) do
     File.mkdir_p!(Path.dirname(destination))
-    stream = File.stream!(destination)
+    stream = File.stream!(destination, [:delayed_write])
     Enum.into(list, stream, fn pair ->
       case pair do
         {hood, count} -> "#{hood}\t#{count}\n"
