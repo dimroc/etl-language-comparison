@@ -37,7 +37,7 @@ $ ./run_go
 
 #### Observations
 
-- Performance after first write with no optimizations: `3m23.165s` (!!!)
+- Performance after first write with no optimizations: `3m23.165s` (But was using only one core!).
 - Only one core used despite spinning up multiple goroutines. [Had to research why all cores weren't used here](http://stackoverflow.com/questions/17868419/how-can-my-go-program-keep-all-the-cpu-cores-busy).
 - Ultimately, [GOMAXPROCS will be removed](http://golang.org/pkg/runtime/#GOMAXPROCS)
 - Performance average after setting GOMAXPROCS: `1m03.593s`
@@ -77,7 +77,8 @@ $ ./run_scala
 
 #### Observations
 
-- Performance average after first write with no optimizations: [success] Total time: `34s`
+- Performance after first write on first run: `50s`
+- Performance on subsequent runs: `27s`. The JVM is probably doing something fancy.
 - All cores used.
 - Not as IO bound as originally thought. Attributed to the optimizations in the BufferedSource/BufferedWriter classes.
 
@@ -143,7 +144,6 @@ $ ./run_elixir
 - Lack of online resources because of small community. Few Stack Overflow posts, etc.
 - Discoverability is tricky since methods are all class methods on primitive types.
 - Inability to fold/reduce from a stream in a straighforward manner. Had to hold contents in memory.
-
 
 ## Conclusion
 
