@@ -1,6 +1,7 @@
 ## ETL Language Showdown
 This repo implements the same map reduce ETL (Extract-Transform-Load) task in multiple languages
-in an effort to compare language productivity, terseness and readability.
+in an effort to compare language productivity, terseness and readability. The performance comparisons should not be taken seriously. If anything,
+it is a bigger indication of my skillset in that language rather than their performance capabilities. Nonetheless, they are here and reflect what I would realistically face.
 
 ## The Task
 Count the number of tweets that mention 'knicks' in their message and bucket based on the neighborhood of origin.
@@ -19,9 +20,32 @@ The ~1GB dataset for this task, sampled below, contains a tweet's message and it
 
 ## The Languages
 
-1. [Golang 1.2](http://golang.org/) - Imperative
-2. [Scala 2.10.4](http://scala-lang.org/) - Both Imperative and Functional
-3. [Elixir 0.13.0](http://elixir-lang.org/) - Functional
+1. [Ruby 2.1.0](https://www.ruby-lang.org/en/news/2013/12/25/ruby-2-1-0-is-released/) and [GNU Parallel](http://www.gnu.org/software/parallel/)  - Run with GNU parallel to use multiple cores. Serves as a baseline for comparison.
+2. [Golang 1.2](http://golang.org/) - Imperative
+3. [Scala 2.10.4](http://scala-lang.org/) - Both Imperative and Functional
+4. [Elixir 0.13.0](http://elixir-lang.org/) - Functional
+
+### Ruby and Parallel
+
+```
+$ ./run_ruby
+```
+
+This is effectively:
+
+```
+$ parallel -j 90% -a commands.txt && ruby reducer.rb
+```
+
+#### Features used
+
+- GNU Parallel to get around the GIL and more accurately mirror a real world scenario: Many single core workers running ruby
+
+#### Observations
+
+- Performance is very respectable, running at `40s`, with all cores on full blast. But this implementation is skipping over an `ls` of the input files since it's preconfigured.
+- One could argue that a fairer comparison would be to use an Actor System like [Celluloid]() and not cheat with Parallel. It would truly guage the performance of Ruby with it being locked to one core.
+- Separate processes can be a maintenance nightmare. It leads to memory bloat, is difficult to coordinate failed processes, and can be difficult to deploy and scale. There is simplicity in being able to deploy one process that is capable of using all cores.
 
 ### Golang
 
