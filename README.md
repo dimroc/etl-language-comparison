@@ -20,8 +20,8 @@ The ~1GB dataset for this task, sampled below, contains a tweet's message and it
 
 ## The Languages
 
-1. [Ruby 2.1.0](https://www.ruby-lang.org/en/news/2013/12/25/ruby-2-1-0-is-released/) with [Celluloid](http://celluloid.io/)  - Run entirely with Ruby using the Celluloid Actor System. Exposes the GIL limitation and serves as baseline for comparison.
-2. [Ruby 2.1.0](https://www.ruby-lang.org/en/news/2013/12/25/ruby-2-1-0-is-released/) and [GNU Parallel](http://www.gnu.org/software/parallel/)  - Run with GNU parallel to use multiple cores. Serves as a baseline for comparison.
+1. [Ruby 2.1.0](https://www.ruby-lang.org/en/news/2013/12/25/ruby-2-1-0-is-released/) with [Celluloid](http://celluloid.io/)  - Exposes the GIL limitation in pure ruby and shows the multicore advantage of JRuby.
+2. [Ruby 2.1.0](https://www.ruby-lang.org/en/news/2013/12/25/ruby-2-1-0-is-released/) and [GNU Parallel](http://www.gnu.org/software/parallel/)  - Uses GNU parallel to run ruby processes on multiple cores.
 3. [Golang 1.2](http://golang.org/) - Imperative
 4. [Scala 2.10.4](http://scala-lang.org/) - Both Imperative and Functional
 5. [Elixir 0.13.0](http://elixir-lang.org/) - Functional
@@ -38,7 +38,7 @@ $ ./run_ruby
 
 #### Observations
 
-- Performance is very respectable when considering the GIL lock: `1m37.243s`
+- Performance is very respectable when considering the GIL lock: `1m15.243s`
 - Performance is great when run on JRuby, which uses all available cores: `0m41.268s`
 
 ### Ruby with GNU Parallel
@@ -190,9 +190,11 @@ $ ./run_elixir
 
 ## Conclusion
 
-Only after returning to a pure functional language like Elixir do I realize to convenience of **Object Oriented meets Functional**.
+Only after returning to a functional language like Elixir do I realize the convenience of **Object Oriented meets Functional**.
 
 The ability to return an object with relevant methods while still being immutable adds the power of discoverability, a huge advantage over the manipulation of maps and other primitives with Class methods.
+
+The big surprise was JRuby's performance and the impact of being able to use all cores. Running Puma on JRuby is very compelling when using a system with multiple cores.
 
 Golang's simplicity is very refreshing and their built-in profiling contributes to a philosophy of hand-tuning code for the best performance.
 Scala, on the other hand, has the user well removed from the low level, but the JVM handles a lot of optimizations for the programmer, and it shows. If only I didn't need an IDE...
