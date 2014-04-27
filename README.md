@@ -26,7 +26,7 @@ The ~1GB dataset for this task, sampled below, contains a tweet's message and it
 4. [Scala 2.10.4](http://scala-lang.org/) - Both Imperative and Functional
 5. [Elixir 0.13.0](http://elixir-lang.org/) - Functional
 
-### Pure Ruby
+### Ruby
 
 ```
 $ ./run_ruby
@@ -39,6 +39,7 @@ $ ./run_ruby
 #### Observations
 
 - Performance is very respectable when considering the GIL lock: `1m37.243s`
+- Performance is great when run on JRuby, which uses all available cores: `0m41.268s`
 
 ### Ruby with GNU Parallel
 
@@ -58,8 +59,8 @@ $ parallel -j 90% -a commands.txt && ruby reducer.rb
 
 #### Observations
 
-- Performance is very respectable, running at `40s`, with all cores on full blast. But this implementation is skipping over an `ls` of the input files since it's preconfigured.
-- This implementation is cheating a little but serves as a good baseline for other comparisons.
+- Performance is excellent, with all cores on full blast: `40s`.
+- This implementation is cheating in some areas but serves as a good baseline for other comparisons.
 - Separate processes can be a maintenance nightmare. It leads to memory bloat, is difficult to coordinate failed processes, and can be difficult to deploy and scale. There is simplicity in being able to deploy one process that is capable of using all cores.
 - From experience, Ruby's real weakness is its poor performance handling long-running jobs. Memory leaks run rampant. [Twitter shared this opinion](http://blog.redfin.com/devblog/2010/05/how_and_why_twitter_uses_scala.html#.U10CzWRdXLh).
 
