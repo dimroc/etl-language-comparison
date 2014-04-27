@@ -20,12 +20,27 @@ The ~1GB dataset for this task, sampled below, contains a tweet's message and it
 
 ## The Languages
 
-1. [Ruby 2.1.0](https://www.ruby-lang.org/en/news/2013/12/25/ruby-2-1-0-is-released/) and [GNU Parallel](http://www.gnu.org/software/parallel/)  - Run with GNU parallel to use multiple cores. Serves as a baseline for comparison.
-2. [Golang 1.2](http://golang.org/) - Imperative
-3. [Scala 2.10.4](http://scala-lang.org/) - Both Imperative and Functional
-4. [Elixir 0.13.0](http://elixir-lang.org/) - Functional
+1. [Ruby 2.1.0](https://www.ruby-lang.org/en/news/2013/12/25/ruby-2-1-0-is-released/) with [Celluloid](http://celluloid.io/)  - Run entirely with Ruby using the Celluloid Actor System. Exposes the GIL limitation and serves as baseline for comparison.
+2. [Ruby 2.1.0](https://www.ruby-lang.org/en/news/2013/12/25/ruby-2-1-0-is-released/) and [GNU Parallel](http://www.gnu.org/software/parallel/)  - Run with GNU parallel to use multiple cores. Serves as a baseline for comparison.
+3. [Golang 1.2](http://golang.org/) - Imperative
+4. [Scala 2.10.4](http://scala-lang.org/) - Both Imperative and Functional
+5. [Elixir 0.13.0](http://elixir-lang.org/) - Functional
 
-### Ruby and Parallel
+### Pure Ruby
+
+```
+$ ./run_ruby
+```
+
+#### Features used
+
+- Celluloid Actor Pool
+
+#### Observations
+
+- Performance is very respectable when considering the GIL lock: `1m37.243s`
+
+### Ruby with GNU Parallel
 
 ```
 $ ./run_ruby_parallel
@@ -39,13 +54,14 @@ $ parallel -j 90% -a commands.txt && ruby reducer.rb
 
 #### Features used
 
-- GNU Parallel to get around the GIL and more accurately mirror a real world scenario: Many single core workers running ruby
+- GNU Parallel to get around the GIL and more accurately mirror a real world scenario: Many single core workers running one ruby process (eg: Heroku dynos)
 
 #### Observations
 
 - Performance is very respectable, running at `40s`, with all cores on full blast. But this implementation is skipping over an `ls` of the input files since it's preconfigured.
-- One could argue that a fairer comparison would be to use an Actor System like [Celluloid]() and not cheat with Parallel. It would truly guage the performance of Ruby with it being locked to one core.
+- This implementation is cheating a little but serves as a good baseline for other comparisons.
 - Separate processes can be a maintenance nightmare. It leads to memory bloat, is difficult to coordinate failed processes, and can be difficult to deploy and scale. There is simplicity in being able to deploy one process that is capable of using all cores.
+- From experience, Ruby's real weakness is its poor performance handling long-running jobs. Memory leaks run rampant. [Twitter shared this opinion](http://blog.redfin.com/devblog/2010/05/how_and_why_twitter_uses_scala.html#.U10CzWRdXLh).
 
 ### Golang
 
@@ -67,6 +83,7 @@ $ ./run_go
 - Performance average after setting GOMAXPROCS: `1m03.593s`
 - Golang's libraries are fantastic but don't have the mature optimizations of other languages (yet).
 - Ended up being the fewest lines of code across all languages, by a lot.
+- Golang is not functional, so don't force functional programming concepts, like map and reduce.
 
 #### Moments of Joy
 - Handling goroutines with `channel`s and `select`.
@@ -144,7 +161,8 @@ $ ./run_elixir
 - All the Erlang and Elixir goodness
 
 #### Observations
-- Performance average after first write with `:delayed_write`: `2m30.508s`
+- Performance average after first write with `:delayed_write`: `2m30.508s`. 
+- This number says less about Elixir's performance and more about how much I suck at writing Elixir code. Ease of writing performant code though is a valid factor.
 - Extremely productive language once one knows the class methods.
 - Clearly designed for use with a text editor and the command-line (It's great).
 - The Elixir docs are usually the sole source of information, thankfully they are pretty good.

@@ -1,5 +1,6 @@
 require 'fileutils'
 
+# Code shared between ruby/ and ruby_parallel/
 class Mapper
   attr_accessor :input_file, :output_file
   def initialize(input_file, output_file)
@@ -8,11 +9,13 @@ class Mapper
   end
 
   def map
-    f = File.open(input_file, "r")
+    puts "mapping #{input_file} to #{output_file}"
+
     FileUtils.mkdir_p File.dirname(output_file)
+    input = File.open(input_file, "r")
     out = File.open(output_file, "w")
 
-    f.each_line do |line|
+    input.each_line do |line|
       tokens = line.split "\t"
       hood = tokens[1]
       message = tokens[3]
@@ -23,10 +26,8 @@ class Mapper
         out.write "#{hood}\t0\n"
       end
     end
-    f.close
+
+    input.close
+    out.close
   end
 end
-
-input_file = ARGV[0]
-output_file = ARGV[1]
-Mapper.new(input_file, output_file).map

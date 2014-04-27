@@ -1,5 +1,6 @@
 require 'fileutils'
 
+# Code shared between ruby/ and ruby_parallel/
 class Reducer
   attr_accessor :input_dir, :destination
   def initialize(input_dir, destination)
@@ -24,9 +25,10 @@ class Reducer
   end
 
   def reduce_from_file(filepath)
+    puts "reducing #{filepath}"
     hash = {}
-    File.open(filepath, "r") do |f|
-      f.each_line do |line|
+    File.open(filepath, "r") do |input|
+      input.each_line do |line|
         hood, count = line.split "\t"
         hood = hood.to_sym
         hash[hood] = count.to_i + hash.fetch(hood, 0)

@@ -13,7 +13,7 @@ object Reducer {
 
     // Reduce files sequentially to be consistent with other language implementations.
     // Which is a shame since it's so easy to go parallel.
-    // At this scale, there's no need to read the maps from files.
+    // At this scale, there's no need to read the maps from files, but let's make it mimic something of scale.
     val maps = for (file <- files)
       yield retrieveHoodCounts(file)
 
