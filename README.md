@@ -39,7 +39,7 @@ $ ./run_ruby
 #### Observations
 
 - Performance is very respectable when considering the GIL lock: `1m15.243s`
-- Performance is great when run on JRuby, which uses all available cores: `0m41.268s`
+- Performance is great when run on **JRuby**, which uses all available cores: `0m41.268s`
 
 ### Ruby with GNU Parallel
 
@@ -78,13 +78,13 @@ $ ./run_go
 
 #### Observations
 
-- Performance after first write with no optimizations: `3m23.165s` (But was using only one core!).
-- Only one core used despite spinning up multiple goroutines. [Had to research why all cores weren't used here](http://stackoverflow.com/questions/17868419/how-can-my-go-program-keep-all-the-cpu-cores-busy).
-- Ultimately, [GOMAXPROCS will be removed](http://golang.org/pkg/runtime/#GOMAXPROCS)
-- Performance average after setting GOMAXPROCS: `1m03.593s`
+- Performance after first write with no optimizations: `3m23.165s`. **Was only using one core!**
+- Performance average after using all cores by manually setting GOMAXPROCS: `1m03.593s`
+- [Had to research why all cores weren't used here](http://stackoverflow.com/questions/17868419/how-can-my-go-program-keep-all-the-cpu-cores-busy).
+- Ultimately, [GOMAXPROCS will be removed](http://golang.org/pkg/runtime/#GOMAXPROCS) and scheduling will automatically make use of all cores.
 - Golang's libraries are fantastic but don't have the mature optimizations of other languages (yet).
 - Ended up being the fewest lines of code across all languages, by a lot.
-- Golang is not functional, so don't force functional programming concepts, like map and reduce.
+- Golang is not functional, so don't force functional programming concepts, like map and reduce. For loops for days...
 
 #### Moments of Joy
 - Handling goroutines with `channel`s and `select`.
@@ -103,7 +103,15 @@ $ ./run_go
 - Command-line debugger (but I didn't need it).
 
 #### Moments of Disappointment
-- Verbose error handling.
+- Verbose error handling. There are design patterns to better manage errors, but were skipped for this demo.
+
+    ```go
+    files, err := ioutil.ReadDir(inputDir)
+    if err != nil {
+      panic(err)
+    }
+    ```
+
 - Having to explicitly set the number of cores to use via `GOMAXPROCS` because of immature scheduling.
 - Lack of collection helpers like `map` and `reduce`.
 
@@ -170,7 +178,7 @@ $ ./run_elixir
 
 #### Moments of Joy
 - [MacVim Vundle!](https://github.com/elixir-lang/vim-elixir)
-- Using Interactive Elixir, `iex` and Mix is fantastic. Perferable to `sbt console`.
+- Using Interactive Elixir, `iex` and Mix is fantastic. Preferable to `sbt console`.
 - Matching on assignment: `{:ok, result} = {:ok, 5}`.
 - Functional style coupled with pipeline operators and anonymous methods makes for some beautifully code.
 - `Stream.into` allows manipulation of infinite collections in a terse manner
@@ -183,21 +191,18 @@ $ ./run_elixir
     ```
 
 #### Moments of Disappointment
-- The lack of objects is initially infuriating. Hard to encapsulate logic, and modules don't seem like a substitute. It effectively means that most if not all built-in methods only return primitive types as opposed to objects.
+- The lack of objects is initially infuriating. Hard to encapsulate logic, and structs don't seem like a substitute. It effectively means that most if not all built-in methods only return primitive types as opposed to objects.
 - Lack of online resources because of small community. Few Stack Overflow posts, etc.
 - Discoverability is tricky since methods are all class methods on primitive types.
 - Inability to fold/reduce from a stream in a straighforward manner. Had to hold contents in memory.
 
 ## Conclusion
 
-Only after returning to a functional language like Elixir do I realize the convenience of **Object Oriented meets Functional**.
-
-The ability to return an object with relevant methods while still being immutable adds the power of discoverability, a huge advantage over the manipulation of maps and other primitives with Class methods.
-
-The big surprise was JRuby's performance and the impact of being able to use all cores. Running Puma on JRuby is very compelling when using a system with multiple cores.
-
-Golang's simplicity is very refreshing and their built-in profiling contributes to a philosophy of hand-tuning code for the best performance.
-Scala, on the other hand, has the user well removed from the low level, but the JVM handles a lot of optimizations for the programmer, and it shows. If only I didn't need an IDE...
+- Only after returning to a functional language like Elixir do I realize the convenience of **Object Oriented meets Functional**.
+- The ability to return an object with relevant methods while still being immutable adds the power of discoverability, a huge advantage over the manipulation of maps and other primitives with Class methods.
+- The big surprise was JRuby's performance and the impact of being able to use all cores. Running Puma on JRuby is very compelling when using a system with multiple cores.
+- Golang's simplicity is very refreshing and their built-in profiling contributes to a philosophy of hand-tuning code for the best performance.
+- Scala, on the other hand, has the user well removed from the low level, but the JVM handles a lot of optimizations for the programmer, and it shows. If only I didn't need an IDE...
 
 For ETL operations, it would be remiss to ignore the Hadoop and Java ecosystem. Scala provides an incredible toolset for all ETL operations.
 
