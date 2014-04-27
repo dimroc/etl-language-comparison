@@ -2,4 +2,4 @@
 
 cd ruby_parallel/
 parallel -j 90% -a commands.txt
-ruby reducer.rb
+ruby reduction_launcher.rb
