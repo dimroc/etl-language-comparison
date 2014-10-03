@@ -39,7 +39,6 @@ func main() {
 
 	// queues
 	filenames := make(chan string, *procs)
-	mentions := make(chan string, 1000)
 	results := make(chan map[string]int, *procs)
 
 	// find files
@@ -52,8 +51,9 @@ func main() {
 		close(filenames)
 	}()
 
-	// parse files
+	// parse and count
 	async.Spawn(*procs, func(i int) {
+		count := make(map[string]int)
 		for filename := range filenames {
 			file, err := os.Open(filename)
 			check(err)
@@ -64,19 +64,11 @@ func main() {
 				// id, hood, borough, message
 				hood, message := record[1], record[3]
 				if reQuery.MatchString(message) {
-					mentions <- hood
+					count[hood]++
 				}
 			}
 
 			file.Close()
-		}
-	}, func() { close(mentions) })
-
-	// reduce values
-	async.Spawn(*procs, func(i int) {
-		count := make(map[string]int)
-		for m := range mentions {
-			count[m]++
 		}
 		results <- count
 	}, func() { close(results) })
