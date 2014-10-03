@@ -1,5 +1,3 @@
 #!/bin/bash
 
-cd golang/
-GOPATH=$(pwd)
-go run src/main.go ../tmp/tweets ../tmp/go_output
+go run golang/search.go -in=tmp/tweets > tmp/final.txt
