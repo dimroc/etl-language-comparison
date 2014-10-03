@@ -12,8 +12,7 @@ import (
 	"runtime"
 	"sort"
 	"strings"
-
-	"github.com/egonelbre/async"
+	"sync/atomic"
 )
 
 var (
@@ -52,7 +51,7 @@ func main() {
 	}()
 
 	// parse and count
-	async.Spawn(*procs, func(i int) {
+	Spawn(*procs, func() {
 		count := make(map[string]int)
 		for filename := range filenames {
 			file, err := os.Open(filename)
@@ -104,3 +103,18 @@ type byCount []Stat
 func (a byCount) Len() int           { return len(a) }
 func (a byCount) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a byCount) Less(i, j int) bool { return a[i].Count > a[j].Count }
+
+// Spawns N routines, after each completes runs all whendone functions
+func Spawn(N int, fn func(), whendone ...func()) {
+	waiting := int32(N)
+	for k := 0; k < N; k += 1 {
+		go func() {
+			fn()
+			if atomic.AddInt32(&waiting, -1) == 0 {
+				for _, fn := range whendone {
+					fn()
+				}
+			}
+		}()
+	}
+}
