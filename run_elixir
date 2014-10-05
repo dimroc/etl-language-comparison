@@ -1,5 +1,5 @@
 #!/bin/bash
 
 cd elixir/
-mix clean
-mix mapreduce
+mix compile.protocols
+elixir -pa _build/dev/consolidated -S mix mapreduce
