@@ -1,7 +1,7 @@
 defmodule MapActor do
   @pattern ~r/knicks/i
 
-  def map(parent, input_file, output_file) do
+  def map(parent, {input_file, output_file}) do
     IO.puts "mapping file #{input_file}"
     output = File.stream!(output_file, [:delayed_write])
     File.stream!(input_file)
@@ -11,7 +11,7 @@ defmodule MapActor do
   end
 
   def map_line(line) do
-    {_, hood, _, message} = list_to_tuple String.split(line, "\t")
+    [_, hood, _, message] = String.split(line, "\t")
 
     if message =~ @pattern do
       "#{hood}\t1\n"
