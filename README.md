@@ -24,7 +24,7 @@ The ~1GB dataset for this task, sampled below, contains a tweet's message and it
 2. [Ruby 2.1.0](https://www.ruby-lang.org/en/news/2013/12/25/ruby-2-1-0-is-released/) and [GNU Parallel](http://www.gnu.org/software/parallel/)  - Uses GNU parallel to run ruby processes on multiple cores.
 3. [Golang 1.2](http://golang.org/) - Imperative
 4. [Scala 2.10.4](http://scala-lang.org/) - Both Imperative and Functional
-5. [Elixir 0.13.0](http://elixir-lang.org/) - Functional
+5. [Elixir 1.0](http://elixir-lang.org/) - Functional
 
 ### Ruby
 
@@ -169,8 +169,8 @@ $ ./run_elixir
 - PIDs
 - All the Erlang and Elixir goodness
 
-#### Observations
-- Performance average after first write with `:delayed_write`: `2m30.508s`. 
+#### Observations (Updated to reflect changes in Elixir 1.0)
+- Performance average after first write with `:delayed_write`: `55.964s`.
 - This number says less about Elixir's performance and more about how much I suck at writing Elixir code. Ease of writing performant code though is a valid factor.
 - Extremely productive language once one knows the class methods.
 - Clearly designed for use with a text editor and the command-line (It's great).
@@ -180,7 +180,7 @@ $ ./run_elixir
 - [MacVim Vundle!](https://github.com/elixir-lang/vim-elixir)
 - Using Interactive Elixir, `iex` and Mix is fantastic. Preferable to `sbt console`.
 - Matching on assignment: `{:ok, result} = {:ok, 5}`.
-- Functional style coupled with pipeline operators and anonymous methods makes for some beautifully code.
+- Functional style coupled with pipeline operators and anonymous methods makes for some beautiful code.
 - `Stream.into` allows manipulation of infinite collections in a terse manner
 
     ```elixir
@@ -194,12 +194,11 @@ $ ./run_elixir
 - The lack of objects is initially infuriating. Hard to encapsulate logic, and structs don't seem like a substitute. It effectively means that most if not all built-in methods only return primitive types as opposed to objects.
 - Lack of online resources because of small community. Few Stack Overflow posts, etc.
 - Discoverability is tricky since methods are all class methods on primitive types.
-- Inability to fold/reduce from a stream in a straighforward manner. Had to hold contents in memory.
 
 ## Conclusion
 
-- Only after returning to a functional language like Elixir do I realize the convenience of **Object Oriented meets Functional**.
-- The ability to return an object with relevant methods while still being immutable adds the power of discoverability, a huge advantage over the manipulation of maps and other primitives with Class methods.
+- Only after returning to a functional language like Elixir do I realize the convenience of **Object Oriented meets Functional** in Scala.
+- The ability to return an object with relevant methods while still being immutable adds the power of discoverability, an advantage over the manipulation of maps and other primitives with Class methods.
 - The big surprise was JRuby's performance and the impact of being able to use all cores. Running Puma on JRuby is very compelling when using a system with multiple cores.
 - Golang's simplicity is very refreshing and their built-in profiling contributes to a philosophy of hand-tuning code for the best performance.
 - Scala, on the other hand, has the user well removed from the low level, but the JVM handles a lot of optimizations for the programmer, and it shows. If only I didn't need an IDE...
