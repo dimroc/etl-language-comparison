@@ -16,7 +16,8 @@ import (
 )
 
 var (
-	procs = flag.Int("procs", runtime.NumCPU() * 2, "number of processors to use")
+	procs = flag.Int("procs", runtime.NumCPU(), "number of processors to use")
+	maxprocs = flag.Int("maxprocs", runtime.NumCPU() * 2, "number of processors to use")
 	input = flag.String("in", "", "input directory")
 	query = flag.String("query", "(?i)knicks", "query to search for")
 )
@@ -32,7 +33,7 @@ func main() {
 	if *input == "" {
 		log.Fatal("input folder must be specified")
 	}
-	runtime.GOMAXPROCS(*procs)
+	runtime.GOMAXPROCS(*maxprocs)
 
 	reQuery := regexp.MustCompile(*query)
 
