@@ -52,13 +52,13 @@ def run_file(filename):
 if __name__ == '__main__':
     with Pool(4) as p:
         #use multiprocessing to run one file per cpu
-        map_reduced_per_file = p.map(run_file, ["../tmp/" + x for x in os.listdir('../tmp/') if x.startswith('tweets_')])
+        map_reduced_per_file = p.map(run_file, ["../tmp/tweets/" + x for x in os.listdir('../tmp/tweets/') if x.startswith('tweets_')])
 
         #for each file we have a list of tuples. chain will 'flatmap' them for another 
         #reduce pass
         final_results =  list(reduce(chain.from_iterable(map_reduced_per_file)))
 
-        #sort and print for ease of reading
-        final_results = sorted(final_results, key=itemgetter(0))
+        #sort by size and print for ease of reading
+        final_results = sorted(final_results, key=itemgetter(1), reverse=True)
         with open("../tmp/python_out", 'w') as o:
-            o.writelines(("{} : {}\n".format(res[0], res[1]) for res in final_results))
+            o.writelines(("{}\t{}\n".format(res[0], res[1]) for res in final_results))
