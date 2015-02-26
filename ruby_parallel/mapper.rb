@@ -2,6 +2,8 @@ require 'fileutils'
 
 # Code shared between ruby/ and ruby_parallel/
 class Mapper
+  REGEX = Regexp.compile /knicks/i
+
   attr_accessor :input_file, :output_file
   def initialize(input_file, output_file)
     @input_file = input_file
@@ -20,7 +22,7 @@ class Mapper
       hood = tokens[1]
       message = tokens[3]
 
-      if message =~ /knicks/i
+      if message =~ REGEX
         out.write "#{hood}\t1\n"
       else
         out.write "#{hood}\t0\n"
