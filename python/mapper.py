@@ -5,13 +5,14 @@ import os
 from operator import itemgetter
 from itertools import *
 from multiprocessing import Pool
+from multiprocessing import cpu_count
 
 KNICKS = re.compile(r"knicks", re.I)
 
 
 def mapper(filename):
     '''
-    Given a file, map a list of tuples 
+    Given a file, map a list of tuples
     as (neighborhood, 1) if the message contains 'knicks'
     '''
 
@@ -24,9 +25,9 @@ def mapper(filename):
     # create a list of tuples in the form
     # (neighborhood, 1)
     # if there is a mention of knicks
-    res = [ 
+    res = [
            (x[1], 1)
-           for x in get_parsed_tweet() 
+           for x in get_parsed_tweet()
            if KNICKS.search(x[3])
           ]
 
@@ -50,11 +51,11 @@ def run_file(filename):
 
 
 if __name__ == '__main__':
-    with Pool(4) as p:
+    with Pool(cpu_count()) as p:
         #use multiprocessing to run one file per cpu
         map_reduced_per_file = p.map(run_file, ["../tmp/tweets/" + x for x in os.listdir('../tmp/tweets/') if x.startswith('tweets_')])
 
-        #for each file we have a list of tuples. chain will 'flatmap' them for another 
+        #for each file we have a list of tuples. chain will 'flatmap' them for another
         #reduce pass
         final_results =  list(reduce(chain.from_iterable(map_reduced_per_file)))
 
