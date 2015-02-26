@@ -1,7 +1,14 @@
+# Update
+
+Please see the following blog posts for the latests updates:
+
+1. [ETL Language Showdown](http://www.dimroc.com/2014/09/29/etl-language-showdown/) - Sept. 2014
+2. [ETL Language Showdown Part 2 - Now with Python](http://www.dimroc.com/2015/02/26/2015-02-26-etl-language-showdown-pt2/) - Feb. 2015
+
 ## ETL Language Showdown
 This repo implements the same map reduce ETL (Extract-Transform-Load) task in multiple languages
 in an effort to compare language productivity, terseness and readability. The performance comparisons should not be taken seriously. If anything,
-it is a bigger indication of my skillset in that language rather than their performance capabilities. Nonetheless, they are here and reflect what I would realistically face.
+it is a bigger indication of my skillset in that language rather than their performance capabilities.
 
 ## The Task
 Count the number of tweets that mention 'knicks' in their message and bucket based on the neighborhood of origin.
@@ -25,6 +32,7 @@ The ~1GB dataset for this task, sampled below, contains a tweet's message and it
 3. [Golang 1.2](http://golang.org/) - Imperative
 4. [Scala 2.10.4](http://scala-lang.org/) - Both Imperative and Functional
 5. [Elixir 1.0](http://elixir-lang.org/) - Functional
+6. [Python 3](https://www.python.org/)
 
 ### Ruby
 
