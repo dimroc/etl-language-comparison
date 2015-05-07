@@ -3,7 +3,7 @@ defmodule Mapreduce.Mixfile do
 
   def project do
     [app: :mapreduce,
-     version: "0.0.1",
+     version: "0.0.2",
      elixir: "~> 1.0",
      deps: deps]
   end

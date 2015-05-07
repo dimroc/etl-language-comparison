@@ -1,5 +1,11 @@
 #!/bin/bash
 
+export TIMEFORMAT=%R
 cd elixir/
 mix compile.protocols
-elixir -pa _build/dev/consolidated -S mix mapreduce
+echo 'start timed run'
+time elixir -pa _build/dev/consolidated -S mix mapreduce
+time elixir -pa _build/dev/consolidated -S mix mapreduce
+time elixir -pa _build/dev/consolidated -S mix mapreduce
+time elixir -pa _build/dev/consolidated -S mix mapreduce
+time elixir -pa _build/dev/consolidated -S mix mapreduce
