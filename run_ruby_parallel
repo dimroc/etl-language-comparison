@@ -1,5 +1,0 @@
-#!/bin/bash
-
-cd ruby_parallel/
-parallel -j 100% -a commands.txt
-ruby reduction_launcher.rb

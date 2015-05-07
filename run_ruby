@@ -1,4 +1,5 @@
 #!/bin/bash
 
 cd ruby/
+bundle
 bundle exec ruby mapreduce.rb
