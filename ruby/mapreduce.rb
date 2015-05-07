@@ -38,7 +38,7 @@ def run_mapping_concurrently(input_files)
 end
 
 def write_output(hash)
-  destination = "../tmp/ruby_output/final/final"
+  destination = "../tmp/ruby_output"
   sorted = hash.to_a.sort_by { |p| [-p[1], p[0]] }
   FileUtils.mkdir_p(File.dirname(destination))
   File.open(destination, "w") do |f|
