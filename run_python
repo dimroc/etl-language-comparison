@@ -1,4 +1,9 @@
 #!/bin/bash
 
+export TIMEFORMAT=%R
 cd python/
-python3 mapper.py
+time python3 mapper.py
+time python3 mapper.py
+time python3 mapper.py
+time python3 mapper.py
+time python3 mapper.py

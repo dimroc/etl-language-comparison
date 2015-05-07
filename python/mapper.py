@@ -46,7 +46,7 @@ def reduce(results):
 def run_file(filename):
     data = mapper(filename)
     tuples =  list(reduce(data))
-    print("{} produced {} sets".format(filename, len(tuples)))
+    #print("{} produced {} sets".format(filename, len(tuples)))
     return tuples
 
 
@@ -61,5 +61,5 @@ if __name__ == '__main__':
 
         #sort by size and print for ease of reading
         final_results = sorted(final_results, key=itemgetter(1), reverse=True)
-        with open("../tmp/python_out", 'w') as o:
+        with open("../tmp/python_output", 'w+') as o:
             o.writelines(("{}\t{}\n".format(res[0], res[1]) for res in final_results))
