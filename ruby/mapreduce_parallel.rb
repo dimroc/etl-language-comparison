@@ -1,13 +1,10 @@
-require 'celluloid/autostart'
+require 'parallel'
 require 'fileutils'
 
 input_dir = "../tmp/tweets"
 input_files = Dir.glob(input_dir + "/tweets_*")
 
-Celluloid.logger = nil
-
-class ConcurrentMapper
-  include Celluloid
+class Mapper
   REGEX = Regexp.compile /knicks/i
 
   def read(input_file)
@@ -28,17 +25,13 @@ class ConcurrentMapper
 end
 
 def run_mapping_concurrently(input_files)
-  pool = ConcurrentMapper.pool
-
-  futures = input_files.map do |input|
-    pool.future.read(input)
+  Parallel.map(input_files) do |input|
+    Mapper.new.read(input)
   end
-
-  futures.map(&:value)
 end
 
 def write_output(hash)
-  destination = "../tmp/ruby_output/final/final"
+  destination = "../tmp/ruby_parallel_output/final/final"
   sorted = hash.to_a.sort_by { |p| [-p[1], p[0]] }
   FileUtils.mkdir_p(File.dirname(destination))
   File.open(destination, "w") do |f|

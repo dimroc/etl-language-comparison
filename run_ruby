@@ -1,5 +1,10 @@
 #!/bin/bash
 
+export TIMEFORMAT=%R
 cd ruby/
 bundle
-bundle exec ruby mapreduce.rb
+time bundle exec ruby mapreduce.rb
+time bundle exec ruby mapreduce.rb
+time bundle exec ruby mapreduce.rb
+time bundle exec ruby mapreduce.rb
+time bundle exec ruby mapreduce.rb
