@@ -8,34 +8,9 @@ import java.io._
 import scala.io._
 
 object Reducer {
-  def reduce(inputDir: String, destination: String) = {
-    val files = filesFromInput(inputDir)
-
-    // Reduce files sequentially to be consistent with other language implementations.
-    // Which is a shame since it's so easy to go parallel.
-    // At this scale, there's no need to read the maps from files, but let's make it mimic something of scale.
-    val maps = for (file <- files)
-      yield retrieveHoodCounts(file)
-
-    val finalCounts = combine(maps)
+  def reduce(mappings: List[immutable.Map[String,Int]], destination: String) = {
+    val finalCounts = combine(mappings)
     writeOutput(finalCounts, destination)
-  }
-
-  def retrieveHoodCounts(file: File): immutable.Map[String, Int] = {
-    println(s"reducing ${file.getName()}...")
-
-    def retrieveHoodCountsFromLine(line: String) : (String, Int) = {
-      val tokens = line.split('\t') // hood\tcount
-      (tokens(0), tokens(1).toInt)
-    }
-
-    var map = mutable.Map[String,Int]()
-    io.Source.fromFile(file.getAbsolutePath()).getLines().foreach(line => {
-      val rval = retrieveHoodCountsFromLine(line)
-      map update(rval._1, rval._2 + map.getOrElse(rval._1, 0))
-    })
-
-    immutable.Map(map.toSeq: _*)
   }
 
   def writeOutput(counts: immutable.Map[String,Int], destination: String) = {
@@ -56,7 +31,7 @@ object Reducer {
     writer.close
   }
 
-  def combine(array: Array[immutable.Map[String,Int]]) : immutable.Map[String,Int] =
+  def combine(array: List[immutable.Map[String,Int]]) : immutable.Map[String,Int] =
     array.reduceLeft((a,b) => a |+| b)
 
   def filesFromInput(inputDir: String) = {
@@ -68,7 +43,7 @@ object Reducer {
     file.listFiles.filter(f => !f.isDirectory())
   }
 
-  def printMaps(arrayOfMaps: Array[immutable.Map[String,Int]]) = {
+  def printMaps(arrayOfMaps: List[immutable.Map[String,Int]]) = {
     val mapStrings = for(singleMap <- arrayOfMaps) yield {
       singleMap.map(pair => pair._1+"="+pair._2).mkString("\n")
     }
