@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
-	"io"
 	"log"
 	"os"
 	"path/filepath"
@@ -17,11 +16,10 @@ import (
 )
 
 var (
-	procs    = flag.Int("procs", runtime.NumCPU(), "number of processors to use")
-	maxprocs = flag.Int("maxprocs", runtime.NumCPU()*2, "number of processors to use")
-	input    = flag.String("in", "", "input directory")
-	output   = flag.String("out", "tmp/go_output", "input directory")
-	query    = flag.String("query", "(?i)knicks", "query to search for")
+	procs = flag.Int("procs", runtime.NumCPU(), "number of processors to use")
+	maxprocs = flag.Int("maxprocs", runtime.NumCPU() * 2, "number of processors to use")
+	input = flag.String("in", "", "input directory")
+	query = flag.String("query", "(?i)knicks", "query to search for")
 )
 
 func check(err error) {
@@ -41,7 +39,6 @@ func main() {
 
 	// queues
 	filenames := make(chan string, *procs)
-	filtered := make(chan string, *procs)
 	results := make(chan map[string]int, *procs)
 
 	// find files
@@ -54,12 +51,11 @@ func main() {
 		close(filenames)
 	}()
 
-	// parse and filter
+	// parse and count
 	Spawn(*procs, func() {
+		count := make(map[string]int)
 		for filename := range filenames {
 			file, err := os.Open(filename)
-			outfilename := filepath.Join(*output, filepath.Base(filename))
-			out, err := os.Create(outfilename)
 			check(err)
 
 			scanner := bufio.NewScanner(file)
@@ -68,35 +64,6 @@ func main() {
 				// id, hood, borough, message
 				hood, message := record[1], record[3]
 				if reQuery.MatchString(message) {
-					out.WriteString(hood + "\t1\n")
-				} else {
-					out.WriteString(hood + "\t0\n")
-				}
-			}
-			file.Close()
-			out.Close()
-			filtered <- outfilename
-		}
-	}, func() { close(filtered) })
-
-	// reduce
-	Spawn(*procs, func() {
-		count := make(map[string]int)
-		for filename := range filtered {
-			file, err := os.Open(filename)
-			check(err)
-
-			rd := bufio.NewReader(file)
-			for {
-				line, _, err := rd.ReadLine()
-				if err == io.EOF {
-					break
-				}
-				check(err)
-				record := strings.Split(string(line), "\t")
-				// hood, matches
-				hood, matches := record[0], record[1]
-				if matches == "1" {
 					count[hood]++
 				}
 			}
