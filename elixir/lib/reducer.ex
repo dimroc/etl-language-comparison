@@ -3,9 +3,12 @@ defmodule Reducer do
 
   def reduce(mappings, destination) do
     reduction = Enum.reduce(mappings, HashDict.new, &reduce_mappings/2)
-    final = HashDict.to_list(reduction)
-            # Sort by frequency count first, neighborhood second.
-            |> Enum.sort fn { v1k, v1v }, { v2k, v2v } -> v1v > v2v || (v1v == v2v && v1k < v2k) end
+
+    # Sort by frequency count first, neighborhood second.
+    final = Enum.sort reduction, fn { v1k, v1v }, { v2k, v2v } ->
+      v1v > v2v || (v1v == v2v && v1k < v2k)
+    end
+
     write_to_destination(destination, final)
   end
 

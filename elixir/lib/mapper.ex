@@ -1,9 +1,9 @@
 defmodule Mapper do
   def map(input_dir) do
-    input_files =generate_input_files(input_dir)
+    input_files = generate_input_files(input_dir)
 
     input_files
-    |> Enum.each(fn t -> spawn_link(MapActor, :map, [self(), t]) end)
+    |> Enum.each(fn t -> Task.start_link(MapActor, :map, [self(), t]) end)
 
     listen_for_children(length(input_files), [])
   end
@@ -14,7 +14,7 @@ defmodule Mapper do
 
   defp listen_for_children(count, acc) do
     receive do
-      { :ok, mapping } -> listen_for_children(count - 1, acc ++ [mapping])
+      {:ok, mapping} -> listen_for_children(count - 1, [mapping|acc])
     end
   end
 
