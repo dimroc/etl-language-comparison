@@ -1,28 +1,21 @@
 defmodule Mapper do
-  def map(input_dir, output_dir) do
-    File.mkdir_p! output_dir
-
-    input_files = generate_input_files(input_dir)
-    output_files = generate_output_files(input_files, output_dir)
+  def map(input_dir) do
+    input_files =generate_input_files(input_dir)
 
     input_files
-    |> Enum.zip(output_files)
-    |> Enum.each(fn t -> spawn(MapActor, :map, [self(), t]) end)
+    |> Enum.each(fn t -> spawn_link(MapActor, :map, [self(), t]) end)
 
-    listen_for_children(length(input_files))
+    listen_for_children(length(input_files), [])
   end
 
-  defp listen_for_children(0) do
+  defp listen_for_children(0, acc) do
+    acc
   end
 
-  defp listen_for_children(count) do
+  defp listen_for_children(count, acc) do
     receive do
-      :ok -> listen_for_children(count - 1)
+      { :ok, mapping } -> listen_for_children(count - 1, acc ++ [mapping])
     end
-  end
-
-  defp generate_output_files(input_files, output_dir) do
-    Enum.map(input_files, fn f -> Path.join(output_dir, Path.basename f) end)
   end
 
   defp generate_input_files(input_dir) do
