@@ -103,7 +103,7 @@ type byCount []Stat
 
 func (a byCount) Len() int           { return len(a) }
 func (a byCount) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
-func (a byCount) Less(i, j int) bool { return a[i].Count > a[j].Count }
+func (a byCount) Less(i, j int) bool { return a[i].Count > a[j].Count || (a[i].Count == a[j].Count && a[i].Hood > a[j].Hood) }
 
 // Spawns N routines, after each completes runs all whendone functions
 func Spawn(N int, fn func(), whendone ...func()) {
