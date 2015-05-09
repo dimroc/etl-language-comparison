@@ -59,7 +59,8 @@ if __name__ == '__main__':
         #reduce pass
         final_results =  list(reduce(chain.from_iterable(map_reduced_per_file)))
 
-        #sort by size and print for ease of reading
+        #sort by size descending and then neighborhood ascending
+        final_results = sorted(final_results, key=itemgetter(0))
         final_results = sorted(final_results, key=itemgetter(1), reverse=True)
         with open("../tmp/python_output", 'w+') as o:
             o.writelines(("{}\t{}\n".format(res[0], res[1]) for res in final_results))
