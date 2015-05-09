@@ -14,6 +14,7 @@ defmodule MapActor do
 
   def reduce_stream([_, hood, _, message], acc) do
     hook = String.to_atom(hood)
+    #if String.contains? String.downcase(message), "knicks" do
     if message =~ @pattern do
       HashDict.update(acc, hook, 1, &(&1 + 1))
     else
