@@ -3,7 +3,3 @@
 export TIMEFORMAT=%R
 cd python/
 time python3 mapper.py
-time python3 mapper.py
-time python3 mapper.py
-time python3 mapper.py
-time python3 mapper.py

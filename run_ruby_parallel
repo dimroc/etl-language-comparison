@@ -4,7 +4,3 @@ export TIMEFORMAT=%R
 cd ruby/
 bundle
 time bundle exec ruby mapreduce_parallel.rb
-time bundle exec ruby mapreduce_parallel.rb
-time bundle exec ruby mapreduce_parallel.rb
-time bundle exec ruby mapreduce_parallel.rb
-time bundle exec ruby mapreduce_parallel.rb

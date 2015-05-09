@@ -1,4 +1,5 @@
 #!/bin/bash
 
 cd scala/
-sbt ";run;run;run;run;run"
+sbt run
+#sbt ";run;run;run;run;run"

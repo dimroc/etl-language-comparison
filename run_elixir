@@ -3,9 +3,5 @@
 export TIMEFORMAT=%R
 cd elixir/
 mix compile.protocols
-echo 'start timed runs'
-time MIX_ENV=prod mix mapreduce
-time MIX_ENV=prod mix mapreduce
-time MIX_ENV=prod mix mapreduce
-time MIX_ENV=prod mix mapreduce
+echo 'start timed run'
 time MIX_ENV=prod mix mapreduce
