@@ -10,16 +10,19 @@ import (
 	"path/filepath"
 	"regexp"
 	"runtime"
+	"runtime/pprof"
 	"sort"
 	"strings"
 	"sync/atomic"
 )
 
 var (
-	procs    = flag.Int("procs", runtime.NumCPU(), "number of processors to use")
-	maxprocs = flag.Int("maxprocs", runtime.NumCPU()*2, "number of processors to use")
-	input    = flag.String("in", "", "input directory")
-	query    = flag.String("query", "(?i)knicks", "query to search for")
+	procs = flag.Int("procs", runtime.NumCPU(), "number of processors to use")
+	// Assumes hyperthreading doubles # of cores
+	maxprocs   = flag.Int("maxprocs", runtime.NumCPU()*2, "number of processors to use")
+	input      = flag.String("in", "", "input directory")
+	strategy   = flag.String("strategy", "regex", "query to search for")
+	cpuprofile = flag.String("cpuprofile", "", "write cpu profile to file")
 )
 
 func check(err error) {
@@ -51,16 +54,26 @@ func generateOutput(stats []Stat, output string) {
 
 func main() {
 	flag.Parse()
+	if *cpuprofile != "" {
+		f, err := os.Create(*cpuprofile)
+		if err != nil {
+			panic(err)
+		}
+
+		pprof.StartCPUProfile(f)
+		defer pprof.StopCPUProfile()
+	}
+
 	if *input == "" {
 		log.Fatal("input folder must be specified")
 	}
 	runtime.GOMAXPROCS(*maxprocs)
 
-	reQuery := regexp.MustCompile(*query)
+	matches := selectMatcher(*strategy)
 
 	// queues
-	filenames := make(chan string, *procs)
-	results := make(chan map[string]int, *procs)
+	filenames := make(chan string)
+	results := make(chan map[string]int)
 
 	// find files
 	go func() {
@@ -73,7 +86,7 @@ func main() {
 	}()
 
 	// parse and count
-	Spawn(*procs, func() {
+	Spawn(*maxprocs, func() {
 		count := make(map[string]int)
 		for filename := range filenames {
 			file, err := os.Open(filename)
@@ -84,7 +97,7 @@ func main() {
 				record := strings.Split(scanner.Text(), "\t")
 				// id, hood, borough, message
 				hood, message := record[1], record[3]
-				if reQuery.MatchString(message) {
+				if matches(message) {
 					count[hood]++
 				}
 			}
@@ -110,8 +123,8 @@ func main() {
 	sort.Sort(byCount(stats))
 
 	// write to stdout
-  //writeToStdout(stats)
-  generateOutput(stats, "tmp/golang_output")
+	//writeToStdout(stats)
+	generateOutput(stats, "tmp/golang_output")
 }
 
 type Stat struct {
@@ -139,5 +152,20 @@ func Spawn(N int, fn func(), whendone ...func()) {
 				}
 			}
 		}()
+	}
+}
+
+type matcher func(string) bool
+
+func selectMatcher(strategy string) matcher {
+	if strategy == "substring" {
+		return func(message string) bool {
+			return strings.Contains(strings.ToLower(message), "knicks")
+		}
+	} else {
+		reQuery := regexp.MustCompile("(?i)knicks")
+		return func(message string) bool {
+			return reQuery.MatchString(message)
+		}
 	}
 }

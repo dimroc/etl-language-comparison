@@ -1,4 +1,7 @@
 #!/bin/bash
 
 export TIMEFORMAT=%R
-time go run golang/search.go -in=tmp/tweets # > tmp/golang_output
+time go run golang/search.go -in=tmp/tweets -strategy=substring
+#time go run golang/search.go -in=tmp/tweets -strategy=regex
+#time go run golang/search.go -in=../tmp/tweets/ -cpuprofile=regex.prof -strategy=regex
+#time go run golang/search.go -in=../tmp/tweets/ -cpuprofile=substring.prof -strategy=substring
