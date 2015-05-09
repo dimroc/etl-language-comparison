@@ -26,6 +26,11 @@ class MapActor extends Actor {
     var map = mutable.Map[String,Int]()
     Source.fromFile(input.getAbsolutePath()).getLines.foreach(line => {
       val tokens = line.split('\t')
+      // Substring match
+      //val rval = tokens(3).toLowerCase() contains "knicks"
+      //if(rval) {
+        //map update(tokens(1), 1 + map.getOrElse(tokens(1), 0))
+      //}
       val rval = pattern findFirstIn tokens(3)
       rval match {
         case Some(_) => map update(tokens(1), 1 + map.getOrElse(tokens(1), 0))
