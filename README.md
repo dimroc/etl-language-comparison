@@ -86,7 +86,7 @@ The ~1GB dataset for this task, sampled below, contains a tweet's message and it
   </tr>
 
   <tr>
-    <td>Node w/ [Cluster](https://nodejs.org/docs/latest/api/cluster.html)</td>
+    <td>Node w/ <a href="https://nodejs.org/docs/latest/api/cluster.html" target="_blank">Cluster</a></td>
     <td>TODO</td>
   </tr>
 </table>
