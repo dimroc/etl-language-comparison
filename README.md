@@ -3,7 +3,7 @@
 Please see the following blog posts for the latests updates:
 
 1. [ETL Language Showdown](http://www.dimroc.com/2014/09/29/etl-language-showdown/) - Sept. 2014
-2. [ETL Language Showdown Part 2 - Now with Python](http://www.dimroc.com/2015/02/26/2015-02-26-etl-language-showdown-pt2/) - Feb. 2015
+2. [ETL Language Showdown Part 2 - Now with Python](http://www.dimroc.com/2015/02/26/etl-language-showdown-pt2/) - Feb. 2015
 
 ## ETL Language Showdown
 This repo implements the same map reduce ETL (Extract-Transform-Load) task in multiple languages
@@ -27,7 +27,7 @@ The ~1GB dataset for this task, sampled below, contains a tweet's message and it
 
 ## The Languages
 
-1. [Ruby 2.2.0](https://www.ruby-lang.org/en/news/2015/04/13/ruby-2-2-2-released/)
+1. [Ruby 2.2.2](https://www.ruby-lang.org/en/news/2015/04/13/ruby-2-2-2-released/)
 3. [Golang 1.4.2](http://golang.org/) - Imperative
 4. [Scala 2.11.4](http://scala-lang.org/) - Both Imperative and Functional
 5. [Elixir 1.0.4](http://elixir-lang.org/) - Functional
@@ -78,6 +78,11 @@ The ~1GB dataset for this task, sampled below, contains a tweet's message and it
   <tr>
     <td>Elixir</td>
     <td>21.84s</td>
+  </tr>
+
+  <tr>
+    <td>Node w/ [Cluster](https://nodejs.org/docs/latest/api/cluster.html)</td>
+    <td>TODO</td>
   </tr>
 </table>
 
