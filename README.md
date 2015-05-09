@@ -2,8 +2,8 @@
 
 Please see the following blog posts for the latests updates:
 
-1. [ETL Language Showdown](http://www.dimroc.com/2014/09/29/etl-language-showdown/) - Sept. 2014
-2. [ETL Language Showdown Part 2 - Now with Python](http://www.dimroc.com/2015/02/26/etl-language-showdown-pt2/) - May. 2015
+1. [ETL Language Showdown](http://blog.dimroc.com/2014/09/29/etl-language-showdown/) - Sept. 2014
+2. [ETL Language Showdown Part 2 - Now with Python](http://blog.dimroc.com/2015/05/07/etl-language-showdown-pt2/) - May. 2015
 
 ## ETL Language Showdown
 This repo implements the same map reduce ETL (Extract-Transform-Load) task in multiple languages
