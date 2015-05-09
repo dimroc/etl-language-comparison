@@ -1,4 +1,4 @@
 #!/bin/bash
 
 export TIMEFORMAT=%R
-time go run golang/search.go -in=tmp/tweets > tmp/golang_output
+time go run golang/search.go -in=tmp/tweets # > tmp/golang_output

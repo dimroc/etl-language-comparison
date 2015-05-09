@@ -16,15 +16,36 @@ import (
 )
 
 var (
-	procs = flag.Int("procs", runtime.NumCPU(), "number of processors to use")
-	maxprocs = flag.Int("maxprocs", runtime.NumCPU() * 2, "number of processors to use")
-	input = flag.String("in", "", "input directory")
-	query = flag.String("query", "(?i)knicks", "query to search for")
+	procs    = flag.Int("procs", runtime.NumCPU(), "number of processors to use")
+	maxprocs = flag.Int("maxprocs", runtime.NumCPU()*2, "number of processors to use")
+	input    = flag.String("in", "", "input directory")
+	query    = flag.String("query", "(?i)knicks", "query to search for")
 )
 
 func check(err error) {
 	if err != nil {
 		log.Fatal(err)
+	}
+}
+
+func writeToStdout(stats []Stat) {
+	for _, stat := range stats {
+		fmt.Println(stat.Hood, "\t", stat.Count)
+	}
+}
+
+func generateOutput(stats []Stat, output string) {
+	os.MkdirAll(filepath.Dir(output), 0755)
+
+	file, err := os.Create(output)
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+
+	for _, hoodcount := range stats {
+		rval := fmt.Sprintf("%s\t%d\n", hoodcount.Hood, hoodcount.Count)
+		file.WriteString(rval)
 	}
 }
 
@@ -89,9 +110,8 @@ func main() {
 	sort.Sort(byCount(stats))
 
 	// write to stdout
-	for _, stat := range stats {
-		fmt.Println(stat.Hood, "\t", stat.Count)
-	}
+  //writeToStdout(stats)
+  generateOutput(stats, "tmp/golang_output")
 }
 
 type Stat struct {
@@ -101,9 +121,11 @@ type Stat struct {
 
 type byCount []Stat
 
-func (a byCount) Len() int           { return len(a) }
-func (a byCount) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
-func (a byCount) Less(i, j int) bool { return a[i].Count > a[j].Count || (a[i].Count == a[j].Count && a[i].Hood > a[j].Hood) }
+func (a byCount) Len() int      { return len(a) }
+func (a byCount) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
+func (a byCount) Less(i, j int) bool {
+	return a[i].Count > a[j].Count || (a[i].Count == a[j].Count && a[i].Hood < a[j].Hood)
+}
 
 // Spawns N routines, after each completes runs all whendone functions
 func Spawn(N int, fn func(), whendone ...func()) {
