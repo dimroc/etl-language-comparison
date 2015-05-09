@@ -23,6 +23,8 @@ defmodule Mapreduce.Mixfile do
   #
   # Type `mix help deps` for more examples and options
   defp deps do
-    []
+    [
+      {:exprof, github: 'parroty/exprof'}
+    ]
   end
 end
