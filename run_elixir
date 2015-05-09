@@ -2,10 +2,9 @@
 
 export TIMEFORMAT=%R
 cd elixir/
-mix compile.protocols
 echo 'start timed runs'
-time elixir -pa _build/dev/consolidated -S mix mapreduce
-time elixir -pa _build/dev/consolidated -S mix mapreduce
-time elixir -pa _build/dev/consolidated -S mix mapreduce
-time elixir -pa _build/dev/consolidated -S mix mapreduce
-time elixir -pa _build/dev/consolidated -S mix mapreduce
+time MIX_ENV=prod mix mapreduce
+time MIX_ENV=prod mix mapreduce
+time MIX_ENV=prod mix mapreduce
+time MIX_ENV=prod mix mapreduce
+time MIX_ENV=prod mix mapreduce

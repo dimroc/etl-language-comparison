@@ -13,7 +13,7 @@ defmodule MapActor do
   end
 
   def reduce_stream([_, hood, _, message], acc) do
-    hook     = String.to_atom(hood)
+    hook = String.to_atom(hood)
     if message =~ @pattern do
       HashDict.update(acc, hook, 1, &(&1 + 1))
     else
