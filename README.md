@@ -3,7 +3,7 @@
 Please see the following blog posts for the latests updates:
 
 1. [ETL Language Showdown](http://www.dimroc.com/2014/09/29/etl-language-showdown/) - Sept. 2014
-2. [ETL Language Showdown Part 2 - Now with Python](http://www.dimroc.com/2015/02/26/etl-language-showdown-pt2/) - Feb. 2015
+2. [ETL Language Showdown Part 2 - Now with Python](http://www.dimroc.com/2015/02/26/etl-language-showdown-pt2/) - May. 2015
 
 ## ETL Language Showdown
 This repo implements the same map reduce ETL (Extract-Transform-Load) task in multiple languages
@@ -33,36 +33,36 @@ The ~1GB dataset for this task, sampled below, contains a tweet's message and it
 5. [Elixir 1.0.4](http://elixir-lang.org/) - Functional
 6. [Python 3](https://www.python.org/)
 
-### Ruby
-
-- Celluloid Actor Pool
-- Span multiple processes with [grosser/parallel](https://github.com/grosser/parallel)
-
 ### Scala
 
-- Akka (Supervisors and Actors)
+- Uses Akka (Supervisors and Actors)
 
 ## Results
 
 <table>
   <tr>
     <td>Ruby w/ Celluloid (Global Interpreter Lock Bound, single core)</td>
-    <td>43.745s</td>
+    <td>43.7s</td>
   </tr>
 
   <tr>
     <td>JRuby w/ Celluloid</td>
-    <td>15.855s</td>
+    <td>15.8s</td>
   </tr>
 
   <tr>
     <td>Ruby w/ <a href="https://github.com/grosser/parallel" target="_blank">grosser/parallel</a> (<b>not</b> GNU Parallel)</td>
-    <td>12.449s</td>
+    <td>10.9s</td>
   </tr>
 
   <tr>
     <td>Python w/ <a href="https://docs.python.org/2/library/multiprocessing.html" target="_blank">Pool</a></td>
-    <td>12.730s</td>
+    <td>11.7s</td>
+  </tr>
+
+  <tr>
+    <td>Elixir</td>
+    <td>21.8s</td>
   </tr>
 
   <tr>
@@ -71,13 +71,18 @@ The ~1GB dataset for this task, sampled below, contains a tweet's message and it
   </tr>
 
   <tr>
-    <td>Golang</td>
-    <td>TODO</td>
+    <td>Scala w/ Substring <b>(Skipped regex for performance analysis)</b></td>
+    <td>8.3s</td>
   </tr>
 
   <tr>
-    <td>Elixir</td>
-    <td>21.84s</td>
+    <td>Golang</td>
+    <td>32.8s</td>
+  </tr>
+
+  <tr>
+    <td>Golang w/ Substring <b>(Skipped regex for performance analysis)</b></td>
+    <td>7.8s</td>
   </tr>
 
   <tr>
