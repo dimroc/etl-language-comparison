@@ -1,0 +1,3 @@
+#!/bin/bash 
+nim c --threads:on -d:release --opt:speed nim/mapper.nim
+time nim/mapper
