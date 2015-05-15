@@ -1,0 +1,8 @@
+#!/bin/bash
+
+export TIMEFORMAT=%R
+[ ! -f erlang/rebar ] && wget 'https://github.com/rebar/rebar/wiki/rebar' -O erlang/rebar && chmod +x erlang/rebar
+cd erlang/mapreduce
+../rebar compile
+echo 'start timed run'
+time erl -noinput -pa ebin -run mapreduce
