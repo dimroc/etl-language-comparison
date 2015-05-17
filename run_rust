@@ -1,0 +1,7 @@
+#!/bin/bash
+
+export TIMEFORMAT=%R
+cd rust
+rustc -O -o mapreduce mapreduce.rs
+echo 'start timed run'
+time ./mapreduce
