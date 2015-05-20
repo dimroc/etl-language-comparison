@@ -2,6 +2,8 @@
 
 -export([map/1]).
 
+-define(SEARCH, <<"knicks">>).
+
 map(InputDir) ->
 	case file:list_dir(InputDir) of
 		{ok, Filenames} ->
@@ -10,15 +12,18 @@ map(InputDir) ->
 			erlang:error(Reason)
 	end.
 
-async([File | Files], N) ->
+async(Files, N) ->
+	async(Files, parser:new(?SEARCH), N).
+
+async([File | Files], Parser, N) ->
 	case filelib:is_file(File) of
 		false ->
-			async(Files, N);
+			async(Files, Parser, N);
 		true ->
-			spawn_link(map_actor, map, [self(), File]),
+			spawn_link(map_actor, map, [self(), Parser, File]),
 			async(Files, N+1)
 	end;
-async([], N) ->
+async([], _Parser, N) ->
 	await(N, dict:new()).
 
 await(0, Acc) ->
