@@ -2,17 +2,17 @@ defmodule MapActor do
   @pattern ~r/knicks/i
 
   def map(file) do
-    #IO.puts "mapping file #{file}"
+    bin_pattern = :binary.compile_pattern("\t")
+
     File.stream!(file)
-    |> Stream.map(fn line -> String.split(line, "\t") end)
+    |> Stream.map(fn line -> String.split(line, bin_pattern) end)
     |> Enum.reduce(HashDict.new, &reduce_stream/2)
   end
 
   def reduce_stream([_, hood, _, message], acc) do
-    hook = String.to_atom(hood)
-    #if String.contains? String.downcase(message), "knicks" do
     if message =~ @pattern do
-      HashDict.update(acc, hook, 1, &(&1 + 1))
+      hood = String.to_atom(hood)
+      HashDict.update(acc, hood, 1, &(&1 + 1))
     else
       acc
     end
