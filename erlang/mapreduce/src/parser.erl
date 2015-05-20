@@ -92,11 +92,12 @@ permute_case(Text) ->
 
 permute_case(_, L, _, L, _, Acc) ->
 	lists:reverse(Acc);
-permute_case([H | T], I, J, L, Word, Acc) when J band 1 ->
+permute_case([H | T], I, J, L, Word, Acc) when (J band 1) =/= 0 ->
 	[C] = string:to_upper([H]),
 	permute_case(T, I, J bsr 1, L, [C | Word], Acc);
 permute_case([H | T], I, J, L, Word, Acc) ->
-	permute_case(T, I, J bsr 1, L, [H | Word], Acc);
+	[C] = string:to_lower([H]),
+	permute_case(T, I, J bsr 1, L, [C | Word], Acc);
 permute_case([], I, _, L, Word, Acc) ->
 	List = lists:reverse(Word),
 	J = I+1,
