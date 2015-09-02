@@ -1,0 +1,4 @@
+#!/bin/bash
+
+export TIMEFORMAT=%R
+time php php/search.php
