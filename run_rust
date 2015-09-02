@@ -2,6 +2,9 @@
 
 export TIMEFORMAT=%R
 cd rust
+cargo clean
+cargo update
+cargo build
 cargo build --release
 function mapreduce_regex {
 	echo 'start timed run (regex)'
