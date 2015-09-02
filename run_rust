@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+export TIMEFORMAT=%R
+cd rust
+cargo build --release
+function mapreduce_regex {
+	echo 'start timed run (regex)'
+	time target/release/mapreduce
+}
+function mapreduce_substring {
+	echo 'start timed run (substring)'
+	time target/release/mapreduce --substring
+}
+case "$1" in
+"regex")
+	mapreduce_regex
+	;;
+"substring")
+	mapreduce_substring
+	;;
+*)
+	mapreduce_substring
+	mapreduce_regex
+	;;
+esac
