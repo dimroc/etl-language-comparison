@@ -10,6 +10,10 @@ tmp/
 *.a
 *.so
 
+#Nim
+nim/mapper
+nim/nimcache
+
 # Folders
 _obj
 _test
