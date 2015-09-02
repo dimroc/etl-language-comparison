@@ -1,0 +1,5 @@
+#!/bin/bash
+
+mkdir -p tmp/tweets
+curl -o tmp/tweets20140416.tar.gz https://dimroc-public.s3.amazonaws.com/etl-language-comparison/tweets20140416.tar.gz
+tar -xzf tmp/tweets20140416.tar.gz -C tmp/

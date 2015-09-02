@@ -12,7 +12,9 @@ it is a bigger indication of my skillset in that language rather than their perf
 
 ## The Task
 Count the number of tweets that mention 'knicks' in their message and bucket based on the neighborhood of origin.
-The ~1GB dataset for this task, sampled below, contains a tweet's message and its NYC neighborhood. [It can be downloaded here](https://dimroc-public.s3.amazonaws.com/etl-language-comparison/tweets20140416.tar.gz).
+The ~1GB dataset for this task, sampled below, contains a tweet's message and its NYC neighborhood.
+
+Simply run `fetch_tweets` in the repo directory or [downloaded here](https://dimroc-public.s3.amazonaws.com/etl-language-comparison/tweets20140416.tar.gz).
 
 ```
 91	west-brighton	Brooklyn	Uhhh
