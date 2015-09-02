@@ -1,6 +1,4 @@
 defmodule Reducer do
-  @dict HashDict.new
-
   def reduce(mappings, destination) do
     reduction = Enum.reduce(mappings, HashDict.new, &reduce_mappings/2)
 
