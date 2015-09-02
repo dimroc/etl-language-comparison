@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+export TIMEFORMAT=%R
+[ ! -f erlang/rebar ] && wget 'https://github.com/rebar/rebar/wiki/rebar' -O erlang/rebar && chmod +x erlang/rebar
+cd erlang/mapreduce
+../rebar compile
+function timed_run {
+	local mode="$1"
+	echo "start timed run (${mode})"
+	time erl -noinput -pa ebin -env MAPREDUCE "${mode}" -run mapreduce
+}
+case "$1" in
+"binary")
+	timed_run "binary"
+	;;
+"regex")
+	timed_run "regex"
+	;;
+"unsafe")
+	timed_run "unsafe"
+	;;
+*)
+	timed_run "unsafe"
+	timed_run "binary"
+	timed_run "regex"
+	;;
+esac
