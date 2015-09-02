@@ -3,5 +3,5 @@ name = "mapreduce"
 version = "0.0.1"
 
 [dependencies]
-getopts = "0.2.11"
-regex = "0.1.30"
+getopts = "0.2.14"
+regex = "0.1.41"
