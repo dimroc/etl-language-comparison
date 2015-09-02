@@ -1,17 +1,15 @@
 package mapreduce
 
-import akka.actor.Actor
-import akka.actor.ActorSystem
-import akka.actor.Props
+import akka.actor.{Actor, Props}
 import akka.pattern.ask
 import akka.util.Timeout
-import java.io.File
-import scala.collection._
-import scala.concurrent
+import mapreduce.MapperUtil._
+
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 
 abstract class MapMessage
+
 case class ProcessDirectoryMessage(inputDir: String) extends MapMessage
 
 class MapSupervisor extends Actor {
@@ -19,11 +17,11 @@ class MapSupervisor extends Actor {
     case ProcessDirectoryMessage(inputDir) => sender ! processDirectory(inputDir)
   }
 
-  def processDirectory(inputDir: String): List[immutable.Map[String,Int]] = {
+  def processDirectory(inputDir: String): List[Map[String, Int]] = {
     implicit val timeout = Timeout(5 minutes) // Required for '?' notation
     implicit val system = context.dispatcher
 
-    val inputFiles = generateInputFiles(inputDir)
+    val inputFiles = getInputFiles(inputDir)
 
     val futures = for (file <- inputFiles) yield {
       val basename = file.getName()
@@ -32,17 +30,9 @@ class MapSupervisor extends Actor {
     }
 
     val collapsedFuture = Future.sequence(futures.toList)
-    val result = Await.result(collapsedFuture, 30 minutes).map( x => x.asInstanceOf[immutable.Map[String,Int]] )
+    val result = Await.result(collapsedFuture, 30 minutes).map(x => x.asInstanceOf[Map[String, Int]])
     //println(result)
     result
   }
 
-  def generateInputFiles(dir: String) = {
-    val file = new File(dir)
-    if (!file.isDirectory()) {
-      throw new Exception("input is not a directory")
-    }
-
-    file.listFiles.filter(f => !f.isDirectory())
-  }
 }
