@@ -4,7 +4,7 @@ defmodule Mapreduce.Mixfile do
   def project do
     [app: :mapreduce,
      version: "0.0.2",
-     elixir: "~> 1.0.4 or ~> 1.1-dev",
+     elixir: "~> 1.0.4 or ~> 1.1-beta",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps]
@@ -23,8 +23,6 @@ defmodule Mapreduce.Mixfile do
   #
   # Type `mix help deps` for more examples and options
   defp deps do
-    [
-      {:exprof, github: 'parroty/exprof'}
-    ]
+    []
   end
 end
