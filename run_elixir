@@ -5,5 +5,20 @@ export MIX_ENV=prod
 cd elixir/
 mix deps.get
 mix compile.protocols
-echo 'start timed run'
-time mix mapreduce
+
+case "$1" in
+"binary")
+  echo 'Start binary run'
+  time mix mapreduce "binary"
+  ;;
+"regex")
+  echo 'Start regex run'
+  time mix mapreduce "regex"
+  ;;
+*)
+  echo 'Start binary run'
+  time mix mapreduce "binary"
+  echo 'Start regex run'
+  time mix mapreduce "regex"
+  ;;
+esac
