@@ -9,8 +9,7 @@ namespace Search
     class SearchBinary
     {
         const int BufSize = 2 * 64 * 1024;
-        static byte[] KNICKS = Encoding.UTF8.GetBytes("KNICKS");
-        static byte[] knicks = Encoding.UTF8.GetBytes("knicks");
+        static byte[] knicks = Encoding.ASCII.GetBytes("knicks");
 
         internal static void Search(string folder)
         {
@@ -84,8 +83,8 @@ namespace Search
                 for (j = 0; j < knicks.Length; j++)
                 {
                     var o = (i + j) % BufSize;
-                    var b = buf[o];
-                    if (b != knicks[j] && b != KNICKS[j]) break;
+                    var b = buf[o] | 0x20;
+                    if (b != knicks[j]) break;
                 }
 
                 if (j == knicks.Length) return true;
