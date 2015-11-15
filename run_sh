@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+time find tmp/tweets -type f \
+| LC_ALL=C parallel --will-cite grep -FUi knicks \
+| cut -f2 \
+| sort | uniq -c | sort -rns \
+| awk '{print $2"\t"$1}' > tmp/sh_output
