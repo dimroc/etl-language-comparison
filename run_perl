@@ -1,0 +1,7 @@
+#!/bin/bash
+
+export TIMEFORMAT=%R
+
+time perl/no-mapreduce.pl
+time perl/mapreduce.pl ${1:-4}
+
