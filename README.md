@@ -4,6 +4,7 @@ Please see the following blog posts for the latests updates:
 
 1. [ETL Language Showdown](http://blog.dimroc.com/2014/09/29/etl-language-showdown/) - Sept. 2014
 2. [ETL Language Showdown Part 2 - Now with Python](http://blog.dimroc.com/2015/05/07/etl-language-showdown-pt2/) - May. 2015
+2. [ETL Language Showdown Part 3 - 10 Languages and growing](http://blog.dimroc.com/2015/11/14/etl-language-showdown-pt3/) - Nov. 2015
 
 ## ETL Language Showdown
 This repo implements the same map reduce ETL (Extract-Transform-Load) task in multiple languages
@@ -29,67 +30,24 @@ Simply run `fetch_tweets` in the repo directory or [downloaded here](https://dim
 
 ## The Languages
 
-1. [Ruby 2.2.2](https://www.ruby-lang.org/en/news/2015/04/13/ruby-2-2-2-released/)
-3. [Golang 1.4.2](http://golang.org/) - Imperative
-4. [Scala 2.11.4](http://scala-lang.org/) - Both Imperative and Functional
-5. [Elixir 1.0.4](http://elixir-lang.org/) - Functional
-6. [Python 3](https://www.python.org/)
+Below you will find the languages run. Note that frameworks also play a big role, for example the Scala implementation
+compares the parallel collection to futures and the Akka framework. Click through on each language to read more.
 
-### Scala
-
-- Uses Akka (Supervisors and Actors)
-
-## Results
 
 <table>
-  <tr>
-    <td>Ruby w/ Celluloid (Global Interpreter Lock Bound, single core)</td>
-    <td>43.7s</td>
-  </tr>
-
-  <tr>
-    <td>JRuby w/ Celluloid</td>
-    <td>15.8s</td>
-  </tr>
-
-  <tr>
-    <td>Ruby w/ <a href="https://github.com/grosser/parallel" target="_blank">grosser/parallel</a> (<b>not</b> GNU Parallel)</td>
-    <td>10.9s</td>
-  </tr>
-
-  <tr>
-    <td>Python w/ <a href="https://docs.python.org/2/library/multiprocessing.html" target="_blank">Pool</a></td>
-    <td>11.7s</td>
-  </tr>
-
-  <tr>
-    <td>Elixir</td>
-    <td>21.8s</td>
-  </tr>
-
-  <tr>
-    <td>Scala</td>
-    <td>8.8s</td>
-  </tr>
-
-  <tr>
-    <td>Scala w/ Substring <b>(Skipped regex for performance analysis)</b></td>
-    <td>8.3s</td>
-  </tr>
-
-  <tr>
-    <td>Golang</td>
-    <td>32.8s</td>
-  </tr>
-
-  <tr>
-    <td>Golang w/ Substring <b>(Skipped regex for performance analysis)</b></td>
-    <td>7.8s</td>
-  </tr>
-
-  <tr>
-    <td>Node w/ <a href="https://nodejs.org/docs/latest/api/cluster.html" target="_blank">Cluster</a></td>
-    <td>TODO</td>
-  </tr>
+<tr> <th>Language</th><th>Owner</th> </tr>
+<tr> <td><a href="https://github.com/dimroc/etl-language-comparison/tree/master/ruby">Ruby</a></td><td> </td> </tr>
+<tr> <td><a href="https://github.com/dimroc/etl-language-comparison/tree/master/golang">Golang</a></td><td></td> </tr>
+<tr> <td><a href="https://github.com/dimroc/etl-language-comparison/tree/master/scala">Scala</a></td><td></td> </tr>
+<tr> <td><a href="https://github.com/dimroc/etl-language-comparison/tree/master/nim">Nim</a></td><td></td> </tr>
+<tr> <td><a href="https://github.com/dimroc/etl-language-comparison/tree/master/nodejs">Node</a></td><td></td> </tr>
+<tr> <td><a href="https://github.com/dimroc/etl-language-comparison/tree/master/php">PHP</a></td><td></td> </tr>
+<tr> <td><a href="https://github.com/dimroc/etl-language-comparison/tree/master/erlang">Erlang</a></td><td></td> </tr>
+<tr> <td><a href="https://github.com/dimroc/etl-language-comparison/tree/master/elixir">Elixir</a></td><td></td> </tr>
+<tr> <td><a href="https://github.com/dimroc/etl-language-comparison/tree/master/rust">Rust</a></td><td></td> </tr>
+<tr> <td><a href="https://github.com/dimroc/etl-language-comparison/tree/master/python">Python</a></td><td></td> </tr>
+<tr> <td><a href="https://github.com/dimroc/etl-language-comparison/tree/master/csharp">C#</a></td><td><a href="https://github.com/mganss">mganss</a></td> </tr>
+<tr> <td><a href="https://github.com/dimroc/etl-language-comparison/tree/master/shell">shell</a></td><td><a href="https://github.com/mganss">mganss</a></td> </tr>
+<tr> <td><a href="https://github.com/dimroc/etl-language-comparison/tree/master/perl">perl</a></td><td><a href="https://github.com/sitaramc">sitaramc</a></td> </tr>
 </table>
 
