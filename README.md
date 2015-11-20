@@ -4,7 +4,16 @@ Please see the following blog posts for the latests updates:
 
 1. [ETL Language Showdown](http://blog.dimroc.com/2014/09/29/etl-language-showdown/) - Sept. 2014
 2. [ETL Language Showdown Part 2 - Now with Python](http://blog.dimroc.com/2015/05/07/etl-language-showdown-pt2/) - May. 2015
-2. [ETL Language Showdown Part 3 - 10 Languages and growing](http://blog.dimroc.com/2015/11/14/etl-language-showdown-pt3/) - Nov. 2015
+3. [ETL Language Showdown Part 3 - 10 Languages and growing](http://blog.dimroc.com/2015/11/14/etl-language-showdown-pt3/) - Nov. 2015
+
+----
+
+## Wins
+
+Analyses and discussions done here have led to the following language pull requests:
+
+1. [Add BIF binary:split/2,3 to Erlang](https://github.com/erlang/otp/pull/771)
+2. [Improve case insensitive regex to Golang](https://github.com/golang/go/issues/13288)
 
 ## ETL Language Showdown
 This repo implements the same map reduce ETL (Extract-Transform-Load) task in multiple languages
