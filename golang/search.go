@@ -13,7 +13,7 @@ import (
 	"runtime/pprof"
 	"sort"
 	"strings"
-	"sync/atomic"
+	"sync"
 )
 
 var (
@@ -31,13 +31,7 @@ func check(err error) {
 	}
 }
 
-func writeToStdout(stats []Stat) {
-	for _, stat := range stats {
-		fmt.Println(stat.Hood, "\t", stat.Count)
-	}
-}
-
-func generateOutput(stats []Stat, output string) {
+func generateOutput(stats []stat, output string) {
 	os.MkdirAll(filepath.Dir(output), 0755)
 
 	file, err := os.Create(output)
@@ -69,70 +63,71 @@ func main() {
 	}
 	runtime.GOMAXPROCS(*maxprocs)
 
-	matches := selectMatcher(*strategy)
+	matches := lengthMatcher(selectMatcher(*strategy))
 
-	// queues
-	filenames := make(chan string)
-	results := make(chan map[string]int)
+	// queue of matched hoods.
+	results := make(chan string, *maxprocs)
 
 	// find files
-	go func() {
-		filelist, err := ioutil.ReadDir(*input)
-		check(err)
-		for _, file := range filelist {
-			filenames <- filepath.Join(*input, file.Name())
-		}
-		close(filenames)
-	}()
+	filelist, err := ioutil.ReadDir(*input)
+	check(err)
 
 	// parse and count
-	Spawn(*maxprocs, func() {
-		count := make(map[string]int)
-		for filename := range filenames {
-			file, err := os.Open(filename)
-			check(err)
-
-			scanner := bufio.NewScanner(file)
-			for scanner.Scan() {
-				record := strings.Split(scanner.Text(), "\t")
-				// id, hood, borough, message
-				hood, message := record[1], record[3]
-				if matches(message) {
-					count[hood]++
-				}
-			}
-
-			file.Close()
-		}
-		results <- count
-	}, func() { close(results) })
+	var join sync.WaitGroup
+	for _, file := range filelist {
+		join.Add(1)
+		go mapper(filepath.Join(*input, file.Name()), matches, results, &join)
+	}
+	go func() {
+		join.Wait() // Rendezvous and cease the summarization.
+		close(results)
+	}()
 
 	// merge results
-	total := make(map[string]int)
-	for result := range results {
-		for hood, count := range result {
-			total[hood] += count
-		}
-	}
+	total := reducer(results)
 
 	// sort stats
-	stats := make([]Stat, 0, len(total))
+	stats := make([]stat, 0, len(total))
 	for hood, count := range total {
-		stats = append(stats, Stat{hood, count})
+		stats = append(stats, stat{hood, count})
 	}
 	sort.Sort(byCount(stats))
 
 	// write to stdout
-	//writeToStdout(stats)
 	generateOutput(stats, "tmp/golang_output")
 }
 
-type Stat struct {
+func mapper(f string, matches matcher, results chan<- string, join *sync.WaitGroup) {
+	defer join.Done()
+	file, err := os.Open(f)
+	check(err)
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		record := strings.SplitN(scanner.Text(), "\t", 4)
+		// id, hood, borough, message
+		hood, message := record[1], record[3]
+		if matches(message) {
+			results <- hood
+		}
+	}
+}
+
+func reducer(results <-chan string) map[string]int {
+	out := make(map[string]int)
+	for hood := range results {
+		out[hood]++
+	}
+	return out
+}
+
+type stat struct {
 	Hood  string
 	Count int
 }
 
-type byCount []Stat
+type byCount []stat
 
 func (a byCount) Len() int      { return len(a) }
 func (a byCount) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
@@ -140,32 +135,26 @@ func (a byCount) Less(i, j int) bool {
 	return a[i].Count > a[j].Count || (a[i].Count == a[j].Count && a[i].Hood < a[j].Hood)
 }
 
-// Spawns N routines, after each completes runs all whendone functions
-func Spawn(N int, fn func(), whendone ...func()) {
-	waiting := int32(N)
-	for k := 0; k < N; k += 1 {
-		go func() {
-			fn()
-			if atomic.AddInt32(&waiting, -1) == 0 {
-				for _, fn := range whendone {
-					fn()
-				}
-			}
-		}()
+type matcher func(string) bool
+
+func lengthMatcher(next matcher) matcher {
+	const l = len("knicks")
+	return func(message string) bool {
+		if len(message) < l {
+			return false
+		}
+		return next(message)
 	}
 }
-
-type matcher func(string) bool
 
 func selectMatcher(strategy string) matcher {
 	if strategy == "substring" {
 		return func(message string) bool {
 			return strings.Contains(strings.ToLower(message), "knicks")
 		}
-	} else {
-		reQuery := regexp.MustCompile("(?i)knicks")
-		return func(message string) bool {
-			return reQuery.MatchString(message)
-		}
+	}
+	reQuery := regexp.MustCompile("(?i)knicks")
+	return func(message string) bool {
+		return reQuery.MatchString(message)
 	}
 }
