@@ -1,0 +1,4 @@
+#!/bin/bash
+
+export TIMEFORMAT=%R
+time /Applications/Mathematica.app/Contents/MacOS/WolframScript -script mathematica/etl_tweets.m
