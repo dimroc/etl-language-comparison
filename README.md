@@ -46,7 +46,7 @@ compares the parallel collection to futures and the Akka framework. Click throug
 <table>
 <tr> <th>Language</th><th>Owner</th> </tr>
 <tr> <td><a href="https://github.com/dimroc/etl-language-comparison/tree/master/ruby">Ruby</a></td><td> </td> </tr>
-<tr> <td><a href="https://github.com/dimroc/etl-language-comparison/tree/master/golang">Golang</a></td><td></td> </tr>
+<tr> <td><a href="https://github.com/dimroc/etl-language-comparison/tree/master/golang">Golang</a></td><td><a href="https://github.com/matttproud">matttproud</a></td> </tr>
 <tr> <td><a href="https://github.com/dimroc/etl-language-comparison/tree/master/scala">Scala</a></td><td></td> </tr>
 <tr> <td><a href="https://github.com/dimroc/etl-language-comparison/tree/master/nim">Nim</a></td><td></td> </tr>
 <tr> <td><a href="https://github.com/dimroc/etl-language-comparison/tree/master/nodejs">Node</a></td><td></td> </tr>
