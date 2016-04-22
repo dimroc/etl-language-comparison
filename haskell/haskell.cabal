@@ -1,0 +1,60 @@
+name:                haskell
+version:             0.1.0.0
+synopsis:            Initial project template from stack
+description:         Please see README.md
+homepage:            https://github.com/tippenein/haskell#readme
+license:             BSD3
+author:              tippenein
+maintainer:          tippenein@gmail.com
+copyright:           2016 Author name here
+category:            Web
+build-type:          Simple
+-- extra-source-files:
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  exposed-modules:
+      MapReduce
+    , Matcher
+  build-depends:
+      base >= 4.7 && < 5
+    , pipes
+    , binary
+    , text
+    , regex-tdfa
+    , filepath
+    , Glob
+    , transformers
+    , containers
+    , async
+    , text
+    , stringsearch
+    , stm-containers
+    , list-t
+    , bytestring-lexing
+    , stm
+    , bytestring
+  default-language:    Haskell2010
+
+executable haskell
+  hs-source-dirs:      executable
+  main-is:             Main.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , haskell
+  default-language:    Haskell2010
+
+source-repository head
+  type:     git
+  location: https://github.com/tippenein/haskell
+
+benchmark benchmark
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      bench
+  main-is:             bench.hs
+  build-depends:       base >=4.6 && <4.9
+                     , haskell
+                     , criterion
+  default-language:    Haskell2010
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N

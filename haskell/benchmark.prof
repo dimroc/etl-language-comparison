@@ -1,0 +1,13 @@
+benchmarking main/regex
+time                 7.652 s    (7.358 s .. 7.819 s)
+                     1.000 R²   (1.000 R² .. 1.000 R²)
+mean                 7.732 s    (7.710 s .. 7.744 s)
+std dev              19.57 ms   (0.0 s .. 21.07 ms)
+variance introduced by outliers: 19% (moderately inflated)
+
+benchmarking main/indice
+time                 2.887 s    (2.830 s .. 2.919 s)
+                     1.000 R²   (1.000 R² .. 1.000 R²)
+mean                 2.872 s    (2.856 s .. 2.881 s)
+std dev              14.19 ms   (0.0 s .. 15.57 ms)
+variance introduced by outliers: 19% (moderately inflated)

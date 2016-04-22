@@ -1,0 +1,26 @@
+#!/bin/bash
+
+cd haskell && stack build
+
+export TIMEFORMAT=%R
+# time stack exec haskell -- +RTS -N4
+function runIt() {
+  time stack exec haskell -- $1
+}
+
+case "$1" in
+"indice")
+  echo 'Start indice run'
+  runIt "indice"
+  ;;
+"regex")
+  echo 'Start regex run'
+  runIt "regex"
+  ;;
+*)
+  echo 'Start indice run'
+  runIt "indice"
+  echo 'Start regex run'
+  runIt "regex"
+  ;;
+esac
