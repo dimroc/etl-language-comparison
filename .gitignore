@@ -32,3 +32,6 @@ _testmain.go
 
 *.exe
 *.test
+.stack-work/
+dist
+dist-*
