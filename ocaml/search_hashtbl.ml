@@ -9,7 +9,7 @@ let mapper file =
     IO.lines_of2 file |> iter @@ fun line ->
     match String.nsplit line "\t" with
     | [_; hood; _; message] when Re.execp knicks_re message ->
-      Hashtbl.modify_def (-1) hood succ table
+      Hashtbl.modify_def 0 hood succ table
     | _ -> () in
   table
 

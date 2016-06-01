@@ -5,7 +5,7 @@ let knicks_re = Re.str "knicks" |> Re.no_case |> Re.compile
 let update map line =
   match String.nsplit line "\t" with
   | [_; hood; _; message] when Re.execp knicks_re message ->
-    Map.modify_def (-1) hood succ map
+    Map.modify_def 0 hood succ map
   | _ ->
     map
 
