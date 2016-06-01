@@ -5,16 +5,17 @@ let fold_lines f init file =
     | line -> fold (f state line)
   in fold init
 
+let knicks_re =
+  Re_pcre.re "^.*\t(.*)\t.*\t.*knicks.*$" |> Re.no_case |> Re.whole_string |> Re.compile
+
 open Batteries
 
-let knicks_re = Re.str "knicks" |> Re.no_case |> Re.compile
-
 let update map line =
-  match String.nsplit line "\t" with
-  | [_; hood; _; message] when Re.execp knicks_re message ->
-    Map.modify_def 0 hood succ map
-  | _ ->
-    map
+  match Re.exec_opt knicks_re line with
+    | None -> map
+    | Some groups ->
+       let hood = Re.Group.get groups 1 in
+       Map.modify_def 0 hood succ map
 
 let mapper file =
   let filename = Filename.concat "../tmp/tweets" file in
