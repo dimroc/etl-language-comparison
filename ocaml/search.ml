@@ -1,18 +1,25 @@
+let fold_lines f init file =
+  let input = open_in file in
+  let rec fold state = match input_line input with
+    | exception _ -> close_in input; state
+    | line -> fold (f state line)
+  in fold init
+
+let knicks_re =
+  Re_pcre.re "^.*\t(.*)\t.*\t.*knicks.*$" |> Re.no_case |> Re.whole_string |> Re.compile
+
 open Batteries
 
-let knicks_re = Re.str "knicks" |> Re.no_case |> Re.compile
-
 let update map line =
-  match String.nsplit line "\t" with
-  | [_; hood; _; message] when Re.execp knicks_re message ->
-    Map.modify_def 0 hood succ map
-  | _ ->
-    map
+  match Re.exec_opt knicks_re line with
+    | None -> map
+    | Some groups ->
+       let hood = Re.Group.get groups 1 in
+       Map.modify_def 0 hood succ map
 
 let mapper file =
   let filename = Filename.concat "../tmp/tweets" file in
-  File.with_file_in filename @@ fun file ->
-    IO.lines_of2 file |> fold update Map.empty
+  fold_lines update Map.empty filename
 
 let merge =
   Map.merge @@ fun _ mo no ->
