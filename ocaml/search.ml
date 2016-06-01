@@ -1,3 +1,10 @@
+let fold_lines f init file =
+  let input = open_in file in
+  let rec fold state = match input_line input with
+    | exception _ -> close_in input; state
+    | line -> fold (f state line)
+  in fold init
+
 open Batteries
 
 let knicks_re = Re.str "knicks" |> Re.no_case |> Re.compile
@@ -11,8 +18,7 @@ let update map line =
 
 let mapper file =
   let filename = Filename.concat "../tmp/tweets" file in
-  File.with_file_in filename @@ fun file ->
-    IO.lines_of2 file |> fold update Map.empty
+  fold_lines update Map.empty filename
 
 let merge =
   Map.merge @@ fun _ mo no ->
