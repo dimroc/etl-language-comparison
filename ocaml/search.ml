@@ -15,7 +15,7 @@ let mapper file =
     IO.lines_of2 file |> fold update Map.empty
 
 let merge =
-  Map.merge @@ fun hood mo no ->
+  Map.merge @@ fun _ mo no ->
   match mo, no with
   | Some m, Some n -> Some (m + n)
   | Some n, None | None, Some n -> Some n
