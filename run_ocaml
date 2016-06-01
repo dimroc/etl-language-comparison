@@ -3,7 +3,7 @@
 cd ocaml/
 
 opam install batteries parmap re
-ocamlfind ocamlopt -o search -linkpkg -package batteries -package parmap -package re -package re.pcre search.ml
+ocamlfind ocamlopt -o search -linkpkg -package batteries -package parmap -package re.pcre search.ml
 
 export TIMEFORMAT=%R
 time ./search
