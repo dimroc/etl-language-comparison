@@ -7,6 +7,7 @@ import Matcher
 import Data.Foldable (traverse_)
 import System.FilePath.Glob (compile, globDir1)
 
+import System.IO.Unsafe (unsafePerformIO)
 import qualified Control.Concurrent.Async as Async
 import qualified Control.Concurrent.STM as STM
 import qualified Data.ByteString as ByteString
@@ -16,11 +17,13 @@ import qualified Data.Text as T
 import qualified Data.Text.Encoding as T
 import qualified ListT
 import qualified STMContainers.Map as Map
+import qualified Data.Map as OrderedMap
+import qualified Data.List as List
+import Data.Ord (comparing)
 
 intToBs = T.encodeUtf8 . T.pack . show
-
 glue r (k, v) =
-    return (ByteString.concat
+    (ByteString.concat
             [ r
             , ByteString.Lazy.Char8.toStrict k
             , "\t"
@@ -54,5 +57,11 @@ runWith matcherArg = do
 
     Async.runConcurrently (traverse_ processFile files)
 
-    fileContents <- STM.atomically (ListT.fold glue "" (Map.stream m))
-    ByteString.writeFile ("../tmp/haskell_" ++ matcherArg ++  "_results.txt") fileContents
+    -- atomically :: STM a -> IO a
+    -- stream :: Map k v -> ListT STM (k, v)
+    let sorted = STM.atomically (
+          List.foldl' glue "" <$>
+          List.sortBy (flip $ comparing snd) <$>
+          (ListT.toReverseList (Map.stream m))
+          )
+    ByteString.writeFile ("../tmp/haskell_" ++ matcherArg ++  "_results.txt") =<< sorted
