@@ -7,6 +7,7 @@ import qualified Data.ByteString.Lazy.Char8 as ByteString.Lazy.Char8
 import qualified Data.ByteString.Search as Search
 import qualified Text.Regex.TDFA.ByteString as Regex
 import Text.Regex.TDFA.Common
+import Data.Maybe (isJust)
 
 parseFile
     :: (ByteString.Lazy.ByteString -> Bool)
@@ -40,7 +41,7 @@ regexMatch :: ByteString.Lazy.ByteString -> Bool
 regexMatch bs =
     case regexMatch' bs of
       Left _ -> False
-      Right _ -> True
+      Right m -> isJust m
 
 regexMatch' =
       Regex.execute (regexPattern "knicks")
